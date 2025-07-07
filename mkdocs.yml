@@ -1,0 +1,48 @@
+site_name: Sam Osian
+site_description: Healthcare Data Scientist
+site_author: Sam Osian
+
+nav:
+  - Home: index.md
+  - Thoughts: blog/index.md
+  - About: about.md
+
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: deep blue
+      accent: deep orange
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    logo: material/book-open-variant
+  features:
+    - navigation.expand
+    - navigation.tabs
+    - navigation.top
+    - navigation.sections
+    - navigation.path
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+    - toc.integrate
+    - header.autohide
+
+plugins:
+  - search
+  - blog
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+  - attr_list
+  - footnotes
