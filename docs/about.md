@@ -1,7 +1,7 @@
 # About me
 
 ```
-Hiya
+Hiya :)
 ```
 
 I’m Sam Osian _(pronounced osh-ahn)_, an AI doctoral researcher currently based in the University of Liverpool. My main focus is currently on understanding what we can learn from coronial data, with the aim of translating evidence into practical tools for researchers, as well as those on the front lines of care.

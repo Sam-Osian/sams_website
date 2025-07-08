@@ -10,9 +10,23 @@ theme:
   name: material
   language: en
   palette:
+
+    # Palette toggle for light mode
     - scheme: default
-      primary: indigo
+      primary: custom
       accent: deep orange
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: custom
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+        
   font:
     text: Roboto
     code: Roboto Mono
@@ -20,7 +34,6 @@ theme:
     logo: material/book-open-variant
   features:
     - navigation.expand
-    - navigation.tabs
     - navigation.top
     - navigation.sections
     - navigation.path
@@ -35,10 +48,14 @@ plugins:
   - search
   - blog:
       blog_dir: .
+      archive: false
+      categories: false
   - social:
       cards: true
       cards_dir: assets/images/social
 
+extra_css:
+  - stylesheets/extra.css
 
 markdown_extensions:
   - admonition
