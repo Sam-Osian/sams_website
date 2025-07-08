@@ -1,10 +1,9 @@
 site_name: Sam Osian
-site_description: Healthcare Data Scientist
+site_description: Health Data Scientist
 site_author: Sam Osian
 
 nav:
-  - Home: index.md
-  - Thoughts: blog/index.md
+  - Home: blog/index.md
   - About: about.md
 
 theme:
@@ -25,7 +24,6 @@ theme:
     - navigation.top
     - navigation.sections
     - navigation.path
-    - navigation.footer
     - search.suggest
     - search.highlight
     - content.code.copy
