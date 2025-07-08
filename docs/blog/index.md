@@ -1,3 +1,15 @@
-# Thoughts
+# Home
 
-Welcome to my blog. Here you'll find various posts on programming and technology.
+Hi, I'm Sam. I'm an opinionated Data Scientist.
+
+```{.wave}
+Enjoy your stay!
+```
+
+<br />
+
+---
+
+
+# Posts
+
