@@ -3,7 +3,7 @@ site_description: Health Data Scientist
 site_author: Sam Osian
 
 nav:
-  - Home: blog/index.md
+  - Home: index.md
   - About: about.md
 
 theme:
@@ -33,7 +33,8 @@ theme:
 
 plugins:
   - search
-  - blog
+  - blog:
+      blog_dir: .
   - social:
       cards: true
       cards_dir: assets/images/social
