@@ -2,11 +2,11 @@
 title: Hello World
 authors:
   - sam
-date: 2024-05-01
+date: 2025-07-08
 categories:
   - General
 ---
 
-Welcome to the first post on Sam's Blog. Stay tuned for more content!
+Welcome to the first post. I promise it'll get better...
 
 <!-- more -->

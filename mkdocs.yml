@@ -30,7 +30,7 @@ theme:
         name: Switch to light mode
         
   font:
-    text: Roboto Flex
+    text: Tinos
     code: Roboto Mono
   icon:
     logo: material/book-open-variant
