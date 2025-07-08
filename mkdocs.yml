@@ -1,6 +1,7 @@
 site_name: Sam Osian
 site_description: Health Data Scientist
 site_author: Sam Osian
+site_url: https://sam-osian.com
 
 nav:
   - Home: index.md
