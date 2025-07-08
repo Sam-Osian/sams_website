@@ -28,7 +28,7 @@ theme:
         name: Switch to light mode
         
   font:
-    text: Roboto
+    text: Roboto Flex
     code: Roboto Mono
   icon:
     logo: material/book-open-variant
@@ -53,6 +53,25 @@ plugins:
   - social:
       cards: true
       cards_dir: assets/images/social
+  - rss:
+      match_path: "posts/.*"
+      date_from_meta:
+        as_creation: date.created
+        as_update: date.updated
+
+extra:
+  social:
+  # github
+    - icon: fontawesome/brands/github
+      name: sam-osian on GitHub
+      link: https://github.com/Sam-Osian
+  # mail
+    - icon: /fontawesome/regular/envelope
+      name: send me an email
+      link: mailto:<samoand@liverpool.ac.uk>
+
+hooks:
+  - hooks/socialmedia.py
 
 extra_css:
   - stylesheets/extra.css
@@ -66,3 +85,6 @@ markdown_extensions:
       permalink: true
   - attr_list
   - footnotes
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
