@@ -8,3 +8,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Draft blog posts
+docs/posts/the-lives-we-could-save.md

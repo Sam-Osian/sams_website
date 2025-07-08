@@ -3,8 +3,4 @@
     --md-primary-fg-color--light: #4eb5b5;   /* Lighter Teal */
     --md-primary-fg-color--dark:  #005959;   /* Darker Teal */
   }
-
-/* Slightly increase base font size */
-html {
-    font-size: 23.5px;
-  }
+  
