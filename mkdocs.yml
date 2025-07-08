@@ -5,6 +5,7 @@ site_author: Sam Osian
 nav:
   - Home: index.md
   - About: about.md
+  - Publications: publications.md
 
 theme:
   name: material
@@ -58,6 +59,7 @@ plugins:
       date_from_meta:
         as_creation: date.created
         as_update: date.updated
+  - glightbox
 
 extra:
   social:
@@ -65,6 +67,10 @@ extra:
     - icon: fontawesome/brands/github
       name: sam-osian on GitHub
       link: https://github.com/Sam-Osian
+  # linkedin
+    - icon: fontawesome/brands/linkedin
+      name: sam-osian on LinkedIn
+      link: https://www.linkedin.com/in/sam-o-andrews/
   # mail
     - icon: /fontawesome/regular/envelope
       name: send me an email

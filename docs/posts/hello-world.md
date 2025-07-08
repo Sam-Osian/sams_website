@@ -8,3 +8,5 @@ categories:
 ---
 
 Welcome to the first post on Sam's Blog. Stay tuned for more content!
+
+<!-- more -->

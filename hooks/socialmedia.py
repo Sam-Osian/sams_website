@@ -4,7 +4,9 @@ import re
 
 x_intent = "https://x.com/intent/tweet"
 fb_sharer = "https://www.facebook.com/sharer/sharer.php"
-include = re.compile(r"blog/[1-9].*")
+# Blog posts are published at paths like YYYY/MM/DD/slug/
+# Match those to add share buttons
+include = re.compile(r"\d{4}/\d{2}/\d{2}/.*")
 
 def on_page_markdown(markdown, **kwargs):
     page = kwargs['page']

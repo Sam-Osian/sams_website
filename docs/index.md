@@ -11,5 +11,3 @@ Enjoy your stay!
 ---
 
 
-# Posts
-
