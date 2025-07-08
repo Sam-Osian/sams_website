@@ -8,3 +8,8 @@
 html {
     font-size: 23.5px;
   }
+
+/* Add a bit more spacing on the right */
+.md-content__inner {
+  padding-right: 10rem;
+}
