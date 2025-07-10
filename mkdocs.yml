@@ -7,6 +7,7 @@ nav:
   - Home: index.md
   - About: about.md
   - Publications: publications.md
+  - PFD Toolkit: https://pfdtoolkit.org
 
 theme:
   name: material
