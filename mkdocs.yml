@@ -45,7 +45,6 @@ theme:
     - search.highlight
     - content.code.copy
     - content.action.edit
-    - toc.integrate
     - header.autohide
 
 plugins:
