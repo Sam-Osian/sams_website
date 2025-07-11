@@ -4,12 +4,8 @@
     --md-primary-fg-color--dark:  #005959;   /* Darker Teal */
   }
 
-/* Slightly increase base font size */
+/* Set base font size */
 html {
-    font-size: 23.5px;
+    font-size: 24px;
   }
 
-/* Add a bit more spacing on the right */
-.md-content__inner {
-  padding-right: 10rem;
-}

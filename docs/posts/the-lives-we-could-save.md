@@ -49,7 +49,7 @@ It’s a laborious process that can take _months_, or even _years_. Perhaps for 
 
 ## The solution
 
-This is where [PFD Toolkit](pfdtoolkit.org) comes in. 
+This is where [PFD Toolkit](https://pfdtoolkit.org) comes in. 
 
 **PFD Toolkit is a Python package designed to do all the heavy lifting in PFD research.**
 
