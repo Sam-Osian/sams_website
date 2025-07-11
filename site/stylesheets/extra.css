@@ -9,3 +9,14 @@ html {
     font-size: 24px;
   }
 
+
+/* Fade-in animation for headers and images */
+.fade-element {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.fade-element.in-view {
+  opacity: 1;
+  transform: none;
+}

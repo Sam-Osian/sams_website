@@ -84,6 +84,8 @@ hooks:
 
 extra_css:
   - stylesheets/extra.css
+extra_javascript:
+  - assets/scripts/fade-in.js
 
 markdown_extensions:
   - admonition
