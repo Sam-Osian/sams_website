@@ -1,5 +1,5 @@
-site_name: Sam Osian
-site_description: Health Data Scientist
+site_name: Sam Osian — Health Data Scientist
+site_description: Sam Osian — Health Data Scientist
 site_author: Sam Osian
 site_url: https://sam-osian.com
 
@@ -74,7 +74,7 @@ extra:
     - icon: fontawesome/brands/linkedin
       name: sam-osian on LinkedIn
       link: https://www.linkedin.com/in/sam-o-andrews/
-  # mail
+  # email
     - icon: /fontawesome/regular/envelope
       name: send me an email
       link: mailto:<samoand@liverpool.ac.uk>
