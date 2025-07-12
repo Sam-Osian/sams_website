@@ -35,7 +35,7 @@ theme:
     code: Roboto Mono
   icon:
     logo: material/book-open-variant
-  favicon: assets/favicon.png
+  favicon: favicon.png
   features:
     - navigation.expand
     - navigation.top
