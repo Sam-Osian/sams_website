@@ -1,10 +1,10 @@
 ---
 draft: false
-title: Rethinking 'statistical significance' — Has the p-value overstayed its welcome?
-slug: rethinking-statistical-significance
+title: Rethinking 'significance' — Has the p-value overstayed its welcome?
+slug: rethinking-significance
 authors:
   - sam
-date: 2025-07-14
+date: 2025-07-15
 categories:
   - Opinion
   - Statistics

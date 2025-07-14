@@ -7,7 +7,7 @@ nav:
   - Home: index.md
   - About: about.md
   - Publications: publications.md
-  - PFD Toolkit: https://pfdtoolkit.org
+  - PFD Toolkit: https://pfdtoolkit.org/
 
 theme:
   name: material
@@ -54,6 +54,7 @@ plugins:
       blog_dir: .
       archive: false
       categories: false
+      post_url_format: "{slug}"
   - social:
       cards: true
       cards_dir: assets/images/social
