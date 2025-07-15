@@ -399,27 +399,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#where-things-start-to-fall-apart" class="md-nav__link">
+  <a href="#when-good-evidence-gets-thrown-out" class="md-nav__link">
     <span class="md-ellipsis">
-      Where things start to fall apart
+      When good evidence gets thrown out
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#but-lets-not-go-too-far" class="md-nav__link">
+  <a href="#but-sometimes-high-stakes-high-standards" class="md-nav__link">
     <span class="md-ellipsis">
-      ...But let's not go too far
+      But sometimes, high stakes = high standards
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#language-is-important" class="md-nav__link">
+  <a href="#almost-statistically-significant-but-not-quite" class="md-nav__link">
     <span class="md-ellipsis">
-      Language is important
+      “Almost statistically significant (but not quite)”
     </span>
   </a>
   
@@ -493,7 +493,7 @@
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
                           <span class="md-ellipsis">
                             
-                              5 min read
+                              6 min read
                             
                           </span>
                         </div>
@@ -528,31 +528,35 @@
 <h2 id="explaining-the-p-value">Explaining the p-value<a class="headerlink" href="#explaining-the-p-value" title="Permanent link">&para;</a></h2>
 <p>If you're somewhat familiar with law (or have at least watched a courtroom drama... or if you're me, Judge Judy), you'll probably know that there are different standards of proof depending on the type of court. </p>
 <p>In criminal cases, this bar is set really high. A jury must be sure “beyond a reasonable doubt” that the defendant did in fact commit the crime. We can (loosely) quantify this as needing to be ~99.5% certain. In civil disputes, it’s “on the balance of probabilities” — essentially, what’s more likely than not (i.e. being at least 51% sure). </p>
-<p>It makes intuitive sense to say that different situations require different thresholds of confidence for making decisions, depending on what's at stake, and how important the end decision is. In criminal court, we can hardly send someone to jail if the evidence <em>points towards</em> but ultimately does not <em>clearly demonstrate</em> that they did in fact carry out the alleged crime. For civil disputes, where neither party faces criminal conviction, the stakes are much lower.</p>
-<p>Yet, in statistical research, we often fail to extend this logic. The p-value — usually pegged at 0.05 — has become a one-size-fits-all verdict on what counts as evidence. </p>
-<p>At its simplest, the p-value tells us how likely it is to observe results as extreme as the ones we got, just by random chance, if there was actually no effect at all. The lower the p-value, the less likely it is that our results are a fluke. Below the <em>0.05</em> threshold, a result is often deemed “statistically significant”; above it, often written off as lacking sufficient evidence. </p>
-<p>The effect of this threshold obscures a much more prudent question: <em>what level of evidence is appropriate for the decision at hand?</em></p>
-<h2 id="where-things-start-to-fall-apart">Where things start to fall apart<a class="headerlink" href="#where-things-start-to-fall-apart" title="Permanent link">&para;</a></h2>
-<p>Consider this hypothetical scenario: a school-based breakfast programme is trialled to see if it improves pupils’ attendance. The study finds a positive effect: among a sample of students with poor baseline attendance, attendance improved by 14% following engagement with the breakfast programme.</p>
-<p>A statistical researcher plugs these data into a model of some kind, and reports this effect alongside a p-value of <em>0.11</em>. This misses the conventional threshold of <em>0.05</em> and, consequently, the researcher deems the results as “statistically insignificant.” The school principal, reading the report, decides to drop the breakfast programme entirely. </p>
-<p>But let’s look at the real-world context. Assume that providing breakfast at school is low-cost, low-risk, and easy to implement. The wider literature may also suggest potential knock-on benefits, such as improved community cohesion. In other words, there’s little to lose, and the evidence — though not definitive — certainly suggests a likely benefit. The effect size itself is modest but it's absolutely <em>practically</em> significant. In other words, the programme is likely to make a positive difference to the school.</p>
-<p>If this were a civil court, we’d simply ask: is it more likely than not that this intervention is associated with improved attendance? On that standard, the answer is a clear <em>yes</em>. The effect size and the p-value, when taken together, cleanly pass the “the balance of probabilities” threshold. Given the low-cost, low-risk nature of the programme, this seems to be vastly more appropriate than applying a “beyond reasonable doubt” standard.</p>
-<h2 id="but-lets-not-go-too-far">...But let's not go too far<a class="headerlink" href="#but-lets-not-go-too-far" title="Permanent link">&para;</a></h2>
-<p>Introducing new medication is a completely different story. The risks could be higher (especially if the drug has major side effects), and the consequences more serious. Medical ethics correctly tells us to be vigilant that we're acting in a given patient's best interests. In this case, a much lower p-value — something closer to “beyond reasonable doubt” — is entirely justified and most likely <em>necessary</em>. </p>
+<p>It makes intuitive sense to say that different situations require different thresholds of confidence for making decisions. In other words, the degree of evidence needed should depend on what's at stake. In criminal court, we can hardly send someone to jail if the evidence <em>points towards</em> but ultimately does not <em>clearly demonstrate</em> that they did in fact carry out the alleged crime. For civil disputes, where neither party faces criminal conviction, the stakes are much lower and consequently the evidence we need to make a judgement is also proportionately lower.</p>
+<p>Yet, in statistical research, we often fail to extend this logic. The p-value — usually pegged at 0.05 — is often used as a one-size-fits-all verdict on what counts as evidence. </p>
+<p>At its simplest, the p-value tells us:</p>
+<blockquote>
+<p>how likely it is to observe results as extreme as the ones we got, just by random chance, if there was actually no effect at all. </p>
+</blockquote>
+<p>The lower the p-value, the less likely it is that our results are a fluke. Below the <em>0.05</em> threshold, a result is often deemed “statistically significant”; above it, often written off as lacking sufficient evidence. </p>
+<p>The effect of this threshold, I argue, obscures a much more prudent question: <em>what level of evidence is appropriate for the decision at hand?</em></p>
+<h2 id="when-good-evidence-gets-thrown-out">When good evidence gets thrown out<a class="headerlink" href="#when-good-evidence-gets-thrown-out" title="Permanent link">&para;</a></h2>
+<p>Consider this hypothetical scenario: a school-based breakfast programme is trialled to see if it improves pupils’ attendance. The study finds a positive effect: among a sample of students with poor baseline attendance, attendance improved by 14% following engagement with the programme.</p>
+<p>A statistical researcher plugs the raw data into a model of some kind, and reports this effect alongside a p-value of <em>0.11</em>. This misses the conventional threshold of <em>0.05</em> and, consequently, the researcher deems the results as “statistically insignificant.” The school principal, reading the report, decides to drop the breakfast programme entirely. </p>
+<p>But let’s look at the real-world context. Assume that providing breakfast at school is low-cost, low-risk, and easy to implement. The wider literature may also suggest potential knock-on benefits, such as improved community cohesion. In other words, there’s little to lose, and the evidence — though not definitive — certainly suggests a likely benefit. The effect size itself is modest but it's absolutely <em>practically</em> significant, even if not <em>statistically</em> significant. In other words, the programme is likely to make a positive difference to the school.</p>
+<p>If this were a civil court, we’d simply ask: is it more likely than not that this intervention is associated with improved attendance? On that standard, the answer is a clear <em>yes</em>. The effect size and the p-value, when taken together, cleanly pass a “the balance of probabilities” threshold. Given the low-cost, low-risk nature of the programme, this seems to be vastly more appropriate than applying a “beyond reasonable doubt” standard.</p>
+<h2 id="but-sometimes-high-stakes-high-standards">But sometimes, high stakes = high standards<a class="headerlink" href="#but-sometimes-high-stakes-high-standards" title="Permanent link">&para;</a></h2>
+<p>A separate scenario where we're introducing a new medication would be a completely different story. The risks could be higher (especially if the drug has major side effects), and the consequences more serious. Medical ethics correctly tells us to be vigilant that we're acting in a given patient's best interests. In this case, a much lower p-value — something closer to “beyond reasonable doubt” — is entirely justified and most likely <em>necessary</em>. </p>
 <p>The point I'm endeavouring to make is that while relying on fixed, uncritical statistical thresholds may be a convenient rule, it's not a particularly useful or thoughtful one. By insisting on a universal threshold, we end up applying the same standard whether the stakes are routine or life-changing. Worse, it encourages us to treat the result as binary: significant or not, yes or no. This doesn't match the grey, murkiness of real-world uncertainty.</p>
-<p>The broader issue here is that statistical prediction isn’t the same as decision-making. Prediction should inform our choices, but complex decisions require a layer of human judgement to mediate between numbers and action. In this way, the p-value should not be used 'checklist' style but rather <em>interpreted</em> within the context of the research area, as well as related statistical metrics like the <abbr title="Our best guess of the population-level effect (e.g. improved attendance by 14%).">point estimate</abbr>, <abbr title="A range of plausible values for our point estimate.">confidence interval</abbr>, and <abbr title="How varied or 'spread out' our data is.">measures of dispersion</abbr>.</p>
-<h2 id="language-is-important">Language is important<a class="headerlink" href="#language-is-important" title="Permanent link">&para;</a></h2>
+<p>The broader issue here is that statistical prediction is not the same thing as decision-making. Prediction should inform our choices, but complex decisions require a layer of human judgement to mediate between numbers and action. In this way, the p-value should not be used 'checklist' style but rather <em>interpreted</em> within the context of the research topic, as well as related statistical metrics like the <abbr title="Our best guess of the population-level effect (e.g. improved attendance by 14%).">point estimate</abbr>, <abbr title="A range of plausible values for our point estimate.">confidence interval</abbr>, and <abbr title="How varied or 'spread out' our data is.">measures of dispersion</abbr>.</p>
+<h2 id="almost-statistically-significant-but-not-quite">“Almost statistically significant (but not quite)”<a class="headerlink" href="#almost-statistically-significant-but-not-quite" title="Permanent link">&para;</a></h2>
 <p>Language plays a part. The phrase “not significant” is a way of stepping back from judgment, leaving the interpretation to the number itself. If instead we said, “There is moderate evidence, but uncertainty remains,” we would be more honest — and probably more useful to anyone trying to make a real-world decision. </p>
-<p>Most researchers have felt the frustration of working on a promising project, only for a regression model to return a p-value of, say, <em>0.054</em>. It's frustrating precisely because we <em>know</em> that our results provide moderate evidence towards our research aim, yet they are still “insignificant” for all intents and purposes. </p>
-<p>This leads some researchers to adopt awkward, and sometimes quite comical, phrasing. <a href="https://www.tandfonline.com/doi/full/10.1080/07315724.2018.1461147">One study</a> researching the potential health impacts of green coffee consumption regularly used the phrase “almost statistically significant” to describe their p-values, which hovered around <em>0.06</em>. I’m not criticising the researchers here, but it does show that the gravitational pull of the 0.05 threshold is strong — even when we know, deep down, that reality is rarely so clear-cut.</p>
+<p>Most researchers have felt the frustration of working on a promising project, only for a regression model to return a p-value of, say, <em>0.054</em>. It's frustrating precisely because we <em>know</em> that our result does in fact provide moderate evidence towards our research aim, yet they are still “insignificant” in the eyes of conventional wisdom. </p>
+<p>This leads some researchers to adopt awkward (and sometimes quite comical) phrasing. <a href="https://www.tandfonline.com/doi/full/10.1080/07315724.2018.1461147">One study</a> researching the health impacts of regular consumption of green coffee used the phrase “almost statistically significant” to describe their p-values, which hovered around <em>0.06</em>. On the face of it, “almost significant” is a funny turn of phrase — a bit like saying someone is “almost pregnant.” But in a way, it’s also a perfectly reasonable instinct: real-world evidence doesn’t suddenly flick from ‘significant’ to ‘not’ just because you’ve crossed a decimal point. The researchers are right for trying to express that nuance, even if the language of significance drags them into binary thinking.</p>
 <figure>
 <p><a class="glightbox" href="../assets/images/paper-almost-significant.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="alt text" src="../assets/images/paper-almost-significant.png" /></a></p>
 <figcaption>
 <p>A published research paper using the phrase ‘almost statistically significant’ for p-values just missing the conventional threshold.</p>
 </figcaption>
 </figure>
-<p>I do want to be transparent here: everything I've said above isn't a novel critique. Many have already been arguing for a more nuanced approach before, particularly in epidemiology where framing of the p-value in terms of providing “low / moderate / strong / very strong” evidence has already started to take hold. </p>
-<p>But still, the checkbox culture persists, especially within the social sciences. We can do better by recognising that the appropriate standard of evidence depends on context — not by pretending that 0.05 has universal applicability.</p>
+<p>I do want to be transparent here: everything I've said above isn't a wholly novel critique. Many have already been arguing for a more nuanced approach before, particularly in epidemiology where framing of the p-value in terms of providing “low / moderate / strong / very strong” evidence against a hypothesis has already started to take hold. </p>
+<p>But still, the checkbox culture of significance is still rife, across clinical and social sciences alike. We can do better by recognising that standards of evidence are highly nuanced, context dependent, and must be an exercise of interpretation and discussion, not a mechanical tick-box exercise dictated by an arbitrary threshold.</p>
 <p>In the end, statistics is a tool for making sense of uncertainty, not erasing it. A p-value is just one part of the story. The real work lies in making thoughtful decisions about what evidence means for the world outside the dataset.</p>
 
 
