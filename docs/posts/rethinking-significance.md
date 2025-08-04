@@ -17,7 +17,7 @@ In research, the p-value is often treated as the ultimate test of truth. But sho
 
 In this post, I argue that the p-value is too often used as a universal yardstick, regardless of context or consequences. Sometimes, what counts as “enough” evidence depends on the risks and decisions at stake, not just on whether a result falls below an arbitrary threshold.
 
-![Is significance just?](https://videos.openai.com/vg-assets/assets%2Ftask_01jzwvhes2f7vs6e1qw9dpfjsr%2F1752241428_img_0.webp?st=2025-07-11T12%3A15%3A11Z&se=2025-07-17T13%3A15%3A11Z&sks=b&skt=2025-07-11T12%3A15%3A11Z&ske=2025-07-17T13%3A15%3A11Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=aa5ddad1-c91a-4f0a-9aca-e20682cc8969&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=Ls0ySDsQcQ2gyn9LvYhWVylTiInT8siN3HzSbDMMY1c%3D&az=oaivgprodscus){ width="600" }
+![Is significance just?](../assets/images/rethinking_significance.webp){ width="600" }
 
 <!-- more -->
 

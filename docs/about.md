@@ -1,6 +1,14 @@
+---
+title: About me
+image: assets/me-circle.png
+meta:
+  - property: og:image
+    content: assets/me-circle.png
+---
+
 # About me
 
-![Me](assets/me-circle.png){ width="300", align="right" }
+![Photo of Sam Osian](assets/me-circle.png){ width="300", align="right" }
 
 ```
 Hiya :)
