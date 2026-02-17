@@ -1,0 +1,27 @@
+{% extends "pages/base.html" %}
+
+{% block title %}{{ page.title }} | Sam Osian{% endblock %}
+
+{% block content %}
+  <article class="markdown-body">
+    {{ page.html|safe }}
+  </article>
+
+  <section>
+    <h2>Recent posts</h2>
+    {% if posts %}
+      {% for post in posts %}
+        <article class="post-card">
+          <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+          {% if post.date %}
+            <p class="meta">{{ post.date|date:"F j, Y" }}</p>
+          {% endif %}
+          <div class="post-summary">{{ post.summary_html|safe }}</div>
+          <p><a href="{{ post.url }}">Read more</a></p>
+        </article>
+      {% endfor %}
+    {% else %}
+      <p>No posts published yet.</p>
+    {% endif %}
+  </section>
+{% endblock %}

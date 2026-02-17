@@ -1,0 +1,13 @@
+{% extends "pages/base.html" %}
+
+{% block title %}{{ post.title }} | Sam Osian{% endblock %}
+
+{% block content %}
+  <article class="markdown-body">
+    <h1>{{ post.title }}</h1>
+    {% if post.date %}
+      <p class="meta">{{ post.date|date:"F j, Y" }}</p>
+    {% endif %}
+    {{ post.body_html|safe }}
+  </article>
+{% endblock %}

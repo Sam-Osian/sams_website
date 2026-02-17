@@ -1,0 +1,96 @@
+body {
+  margin: 0;
+  background: #f6f7f8;
+  color: #1f2933;
+  font-family: "Tinos", Georgia, serif;
+  line-height: 1.65;
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.site-header {
+  border-bottom: 1px solid #d7dce1;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+}
+
+.site-header .container {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  min-height: 64px;
+}
+
+.brand {
+  color: #0f172a;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+nav a {
+  color: #334155;
+  text-decoration: none;
+}
+
+nav a:hover,
+a:hover {
+  color: #0f766e;
+}
+
+main {
+  padding: 2rem 1rem 3rem;
+}
+
+.markdown-body img {
+  border-radius: 8px;
+  max-width: 100%;
+}
+
+.markdown-body blockquote {
+  border-left: 4px solid #0f766e;
+  margin-left: 0;
+  padding-left: 1rem;
+  color: #334155;
+}
+
+.post-card {
+  border-top: 1px solid #d7dce1;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+.meta {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.site-footer {
+  border-top: 1px solid #d7dce1;
+  margin-top: 2rem;
+  padding: 1rem 0 2rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 680px) {
+  html {
+    font-size: 20px;
+  }
+}

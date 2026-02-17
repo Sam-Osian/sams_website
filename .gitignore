@@ -9,5 +9,10 @@ wheels/
 # Virtual environments
 .venv
 
+# Django local artifacts
+django_site/db.sqlite3
+staticfiles/
+.env
+
 # Draft blog posts
 docs/posts/the-lives-we-could-save.md

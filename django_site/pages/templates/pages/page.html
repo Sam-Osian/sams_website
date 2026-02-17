@@ -1,0 +1,9 @@
+{% extends "pages/base.html" %}
+
+{% block title %}{{ page.title }} | Sam Osian{% endblock %}
+
+{% block content %}
+  <article class="markdown-body">
+    {{ page.html|safe }}
+  </article>
+{% endblock %}
