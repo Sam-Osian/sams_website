@@ -1,0 +1,92 @@
+{% extends "pages/base.html" %}
+
+{% block title %}CV | Sam Osian{% endblock %}
+{% block body_class %}site-body standard-page cv-page{% endblock %}
+
+{% block content %}
+  <div class="cv-doc-layout">
+    <aside class="cv-back-rail" data-reveal>
+      <a href="/" class="cv-back-btn" aria-label="Back to homepage">
+        <i class="hgi hgi-stroke hgi-arrow-left-01" aria-hidden="true"></i>
+      </a>
+    </aside>
+
+    <article class="panel cv-document" data-reveal>
+      <header class="cv-doc-header">
+        <span class="panel-chip">{{ cv.title }}</span>
+        <h1>{{ cv.headline_title }}</h1>
+        {% if cv.headline_description %}
+          <p>{{ cv.headline_description }}</p>
+        {% endif %}
+        {% if cv.intro_html %}
+          <div class="cv-intro markdown-body">{{ cv.intro_html|safe }}</div>
+        {% endif %}
+      </header>
+
+      <section class="cv-doc-section" data-reveal>
+        <h2>{{ cv.experience_title }}</h2>
+        <ol class="cv-doc-list">
+          {% for entry in cv.entries %}
+            <li>
+              <div class="cv-doc-period">{{ entry.period }}</div>
+              <div class="cv-doc-body">
+                <h3>{{ entry.role }}</h3>
+                <p class="cv-org">{{ entry.organisation }}</p>
+                {% if entry.context %}
+                  <p class="cv-context">{{ entry.context }}</p>
+                {% endif %}
+                {% if entry.highlights %}
+                  <ul>
+                    {% for highlight in entry.highlights %}
+                      <li>{{ highlight }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </li>
+          {% empty %}
+            <li><p>No experience entries found.</p></li>
+          {% endfor %}
+        </ol>
+      </section>
+
+      <section class="cv-doc-section" data-reveal>
+        <h2>{{ cv.education_title }}</h2>
+        <ol class="cv-doc-list cv-doc-list-edu">
+          {% for entry in cv.education_entries %}
+            <li>
+              <div class="cv-doc-period">{{ entry.period }}</div>
+              <div class="cv-doc-body">
+                <h3>{{ entry.role }}</h3>
+                <p class="cv-org">{{ entry.organisation }}</p>
+                {% if entry.context %}
+                  <p class="cv-context">{{ entry.context }}</p>
+                {% endif %}
+                {% if entry.highlights %}
+                  <ul>
+                    {% for highlight in entry.highlights %}
+                      <li>{{ highlight }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </li>
+          {% empty %}
+            <li><p>No education entries found.</p></li>
+          {% endfor %}
+        </ol>
+      </section>
+
+      <section class="cv-doc-section" data-reveal>
+        <h2>{{ cv.skills_title }}</h2>
+        <div class="cv-skill-grid">
+          {% for skill in cv.key_skills %}
+            <span>{{ skill }}</span>
+          {% empty %}
+            <span>No skills listed</span>
+          {% endfor %}
+        </div>
+      </section>
+    </article>
+  </div>
+{% endblock %}

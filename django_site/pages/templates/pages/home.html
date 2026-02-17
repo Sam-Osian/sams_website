@@ -1,27 +1,169 @@
 {% extends "pages/base.html" %}
 
-{% block title %}{{ page.title }} | Sam Osian{% endblock %}
+{% block title %}Sam Osian{% endblock %}
+{% block body_class %}site-body home-page{% endblock %}
 
 {% block content %}
-  <article class="markdown-body">
-    {{ page.html|safe }}
-  </article>
+  <section class="hero-panel panel js-tilt" data-reveal>
+    <h1 class="hero-title">
+      <span class="hero-line">
+        {{ hero_config.intro_line|default:"Hi, I'm" }}
+        <span class="inline-avatar-wrap">
+          <img class="inline-avatar" src="/static/assets/me-circle.png" alt="Portrait of Sam Osian" />
+        </span>
+        {{ hero_config.name|default:"Sam Osian" }}!
+      </span>
+      <span class="hero-line hero-line-muted">{{ hero_config.role_line|default:"I'm a Data Scientist at" }}</span>
+      <span class="hero-line">
+        <span class="hero-line-accent">{{ hero_config.org_emphasis|default:"University of Liverpool" }}</span>
+        <span class="hero-line-muted-inline"> {{ hero_config.org_suffix_muted|default:"and the" }}</span>
+        <span class="hero-line-accent"> {{ hero_config.org_suffix_accent|default:"NHS." }}</span>
+      </span>
+    </h1>
 
-  <section>
-    <h2>Recent posts</h2>
-    {% if posts %}
-      {% for post in posts %}
-        <article class="post-card">
-          <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-          {% if post.date %}
-            <p class="meta">{{ post.date|date:"F j, Y" }}</p>
+    <div class="availability-pill" aria-label="Availability status">
+      <span class="availability-dot" aria-hidden="true"></span>
+      {{ hero_config.availability_label|default:"Open to collaboration" }}
+    </div>
+
+    <div class="hero-cta-row">
+      <button class="cta-primary js-magnetic" type="button" disabled>
+        <span>Get in touch</span>
+      </button>
+      <p>{{ hero_config.support_copy|default:"Feel free to explore my work and reach out — I'd love to chat :)" }}</p>
+    </div>
+  </section>
+
+  <section class="home-grid">
+    <article class="panel experience-panel js-tilt" data-reveal>
+      <span class="panel-chip">My experience</span>
+      <ol class="timeline-list {% if cv_suggest_prior %}timeline-list--suggestive{% endif %}">
+        {% for entry in cv_entries %}
+          <li>
+            <span class="timeline-year">{{ entry.period }}</span>
+            <strong>{{ entry.role }}</strong>
+            <span>{{ entry.organisation }}{% if entry.context %} · {{ entry.context }}{% endif %}</span>
+          </li>
+        {% empty %}
+          <li>
+            <span class="timeline-year">Career timeline</span>
+            <strong>No CV entries configured yet</strong>
+            <span>Add entries in <code>docs/cv.md</code>.</span>
+          </li>
+        {% endfor %}
+      </ol>
+      <div class="panel-cta-row">
+        <a href="/cv/" class="panel-cta-link">
+          <span>See CV</span>
+          <i class="hgi hgi-stroke hgi-arrow-right-01" aria-hidden="true"></i>
+        </a>
+      </div>
+    </article>
+
+    <article class="panel featured-panel js-tilt" data-reveal>
+      <span class="panel-chip">Featured post</span>
+      {% if featured_post %}
+        {% if featured_post.cover_image_url %}
+          <a class="featured-media" href="{{ featured_post.url }}">
+            <img src="{{ featured_post.cover_image_url }}" alt="Preview image for {{ featured_post.title }}" />
+          </a>
+        {% else %}
+          <a class="featured-media featured-media-fallback" href="{{ featured_post.url }}">
+            <span>Article preview</span>
+          </a>
+        {% endif %}
+        <h2><a href="{{ featured_post.url }}">{{ featured_post.title }}</a></h2>
+        <p>{{ featured_post.summary_html|striptags|truncatechars:220 }}</p>
+        <div class="panel-meta-row">
+          {% if featured_post.date %}
+            <span>{{ featured_post.date|date:"F j, Y" }}</span>
           {% endif %}
-          <div class="post-summary">{{ post.summary_html|safe }}</div>
-          <p><a href="{{ post.url }}">Read more</a></p>
-        </article>
-      {% endfor %}
-    {% else %}
-      <p>No posts published yet.</p>
-    {% endif %}
+          <a href="{{ featured_post.url }}">Read post</a>
+        </div>
+      {% else %}
+        <p>No featured article configured yet.</p>
+      {% endif %}
+    </article>
+
+    <article class="panel recent-panel js-tilt" data-reveal>
+      <span class="panel-chip">Recent posts</span>
+      {% if recent_posts %}
+        <ol class="recent-list">
+          {% for post in recent_posts %}
+            <li>
+              <span class="recent-num">0{{ forloop.counter }}</span>
+              <div>
+                <a href="{{ post.url }}">{{ post.title }}</a>
+                {% if post.date %}
+                  <p>{{ post.date|date:"M j, Y" }}</p>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p>No published posts yet.</p>
+      {% endif %}
+    </article>
+
+    <article class="panel location-panel js-tilt" data-reveal>
+      <span class="panel-chip">Location</span>
+      <div class="map-art" aria-hidden="true"></div>
+      <p class="location-name">LIVERPOOL</p>
+      <p class="location-sub">UNITED KINGDOM · REMOTE FRIENDLY</p>
+    </article>
+
+    <article class="panel workflow-panel js-tilt" data-reveal>
+      <span class="panel-chip">How I work</span>
+      <div class="workflow-copy" data-step-pane="1">
+        <h3>01 Discovery call</h3>
+        <p>I map goals, constraints, and timelines to define a practical research or product direction.</p>
+      </div>
+      <div class="workflow-copy" data-step-pane="2" hidden>
+        <h3>02 Data and context audit</h3>
+        <p>I review available data, assumptions, and quality risks before any modeling begins.</p>
+      </div>
+      <div class="workflow-copy" data-step-pane="3" hidden>
+        <h3>03 Prototype and validate</h3>
+        <p>I build an interpretable prototype, test edge cases, and validate with domain experts.</p>
+      </div>
+      <div class="workflow-copy" data-step-pane="4" hidden>
+        <h3>04 Translate into practice</h3>
+        <p>Outputs are packaged for real use: clear outputs, docs, and implementation pathways.</p>
+      </div>
+      <div class="workflow-copy" data-step-pane="5" hidden>
+        <h3>05 Iterate with feedback</h3>
+        <p>Usage feedback drives refinement, new analysis questions, and better decision support.</p>
+      </div>
+      <div class="workflow-tabs" role="tablist" aria-label="Workflow steps">
+        <button type="button" data-step="1" class="is-active" role="tab" aria-selected="true">Step 01</button>
+        <button type="button" data-step="2" role="tab" aria-selected="false">Step 02</button>
+        <button type="button" data-step="3" role="tab" aria-selected="false">Step 03</button>
+        <button type="button" data-step="4" role="tab" aria-selected="false">Step 04</button>
+        <button type="button" data-step="5" role="tab" aria-selected="false">Step 05</button>
+      </div>
+    </article>
+
+    <article class="panel about-panel js-tilt" data-reveal>
+      <span class="panel-chip">About preview</span>
+      <h3>Interdisciplinary by design</h3>
+      <p>{{ about_preview }}</p>
+      <div class="about-actions">
+        <a href="/about/">Read full background</a>
+        <button type="button" disabled>Case studies</button>
+        <button type="button" disabled>Talks</button>
+      </div>
+    </article>
+
+    <article class="panel research-panel js-tilt is-muted" data-reveal aria-disabled="true">
+      <span class="panel-chip">Research pipeline</span>
+      <h3>New panel coming soon</h3>
+      <p>Open projects, datasets, and method notes will be published here once the structure is finalized.</p>
+      <div class="muted-badges">
+        <span>Data briefs</span>
+        <span>Methods</span>
+        <span>Open notebooks</span>
+      </div>
+    </article>
   </section>
 {% endblock %}

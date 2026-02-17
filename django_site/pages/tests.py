@@ -6,17 +6,25 @@ class PageRouteTests(TestCase):
     def test_home_page_renders(self):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Health Data Scientist")
+        self.assertContains(response, "Data Scientist at")
+        self.assertContains(response, "See CV")
 
     def test_about_page_renders(self):
         response = self.client.get(reverse("about"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "About me")
+        self.assertContains(response, "Research that translates into action")
 
     def test_publications_page_renders(self):
         response = self.client.get(reverse("publications"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Content coming soon")
+
+    def test_cv_page_renders(self):
+        response = self.client.get(reverse("cv"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "CV")
+        self.assertContains(response, "Data Scientist")
+        self.assertContains(response, "Back to homepage")
 
 
 class PostRouteTests(TestCase):

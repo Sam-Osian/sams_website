@@ -1,9 +1,12 @@
 {% extends "pages/base.html" %}
 
 {% block title %}{{ page.title }} | Sam Osian{% endblock %}
+{% block body_class %}site-body standard-page{% endblock %}
 
 {% block content %}
-  <article class="markdown-body">
-    {{ page.html|safe }}
+  <article class="panel page-markdown" data-reveal>
+    <div class="markdown-body">
+      {{ page.html|safe }}
+    </div>
   </article>
 {% endblock %}

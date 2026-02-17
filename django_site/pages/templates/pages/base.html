@@ -6,33 +6,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Sam Osian{% endblock %}</title>
     <link rel="icon" href="{% static 'favicon.png' %}" />
-    <link rel="stylesheet" href="{% static 'stylesheets/extra.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/simplebar@6.2.7/dist/simplebar.min.css"
+    />
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
     <link rel="stylesheet" href="{% static 'pages/site.css' %}" />
-    <script defer src="{% static 'assets/scripts/fade-in.js' %}"></script>
+    {% block extra_head %}{% endblock %}
   </head>
-  <body>
-    <header class="site-header">
-      <div class="container">
-        <a class="brand" href="/">Sam Osian</a>
-        <nav>
-          <a href="/">Home</a>
-          <a href="/about/">About</a>
-          <a href="/publications/">Publications</a>
-          <a href="https://pfdtoolkit.org/" target="_blank" rel="noopener noreferrer">PFD Toolkit</a>
-        </nav>
-      </div>
-    </header>
+  <body class="{% block body_class %}site-body{% endblock %}">
+    <div class="bg-orb orb-a" aria-hidden="true"></div>
+    <div class="bg-orb orb-b" aria-hidden="true"></div>
 
-    <main class="container">
-      {% block content %}{% endblock %}
-    </main>
+    <div class="scroll-root" data-simplebar data-simplebar-auto-hide="false">
+      <div class="site-shell">
+        <header class="shell-top" data-reveal>
+          <a class="identity" href="/">
+            <span class="logo-shape" aria-hidden="true"></span>
+            <span class="identity-dot" aria-hidden="true"></span>
+            <span class="identity-email">samoand@liverpool.ac.uk</span>
+          </a>
 
-    <footer class="site-footer">
-      <div class="container footer-links">
-        <a href="https://github.com/Sam-Osian" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://www.linkedin.com/in/sam-o-andrews/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:samoand@liverpool.ac.uk">Email</a>
+          <div class="top-actions">
+            <a class="top-link" href="/about/">About</a>
+            <a class="top-link" href="/publications/">Publications</a>
+            <button class="menu-orb" type="button" aria-label="Menu" disabled>
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </header>
+
+        <main class="shell-main">{% block content %}{% endblock %}</main>
+
+        <footer class="shell-footer" data-reveal>
+          <a href="https://github.com/Sam-Osian" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/sam-o-andrews/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="mailto:samoand@liverpool.ac.uk">Email</a>
+        </footer>
       </div>
-    </footer>
+    </div>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/simplebar@6.2.7/dist/simplebar.min.js"></script>
+    <script defer src="{% static 'pages/site.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
   </body>
 </html>

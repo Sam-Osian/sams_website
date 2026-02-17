@@ -1,0 +1,65 @@
+{% extends "pages/base.html" %}
+
+{% block title %}About | Sam Osian{% endblock %}
+{% block body_class %}site-body about-page{% endblock %}
+
+{% block content %}
+  <section class="panel about-hero js-tilt" data-reveal>
+    <div class="about-hero-media">
+      <img src="/static/assets/me-circle.png" alt="Portrait of Sam Osian" />
+    </div>
+    <div class="about-hero-copy">
+      <span class="panel-chip">About</span>
+      <h1>Research that translates into action</h1>
+      <p>{{ about_config.intro|default:"I'm Sam Osian, an AI doctoral researcher at the University of Liverpool." }}</p>
+      <p>{{ about_config.body|default:"My focus is practical: convert difficult evidence into tools and methods teams can actually use." }}</p>
+    </div>
+  </section>
+
+  <section class="about-grid">
+    <article class="panel js-tilt" data-reveal>
+      <span class="panel-chip">What I focus on</span>
+      <ul class="focus-list">
+        {% for focus in about_config.focus_points %}
+          <li>{{ focus }}</li>
+        {% empty %}
+          <li>Coroner inquest and Prevention of Future Deaths analysis</li>
+          <li>AI-assisted evidence synthesis for patient safety</li>
+          <li>Open-source methods for public-interest health research</li>
+        {% endfor %}
+      </ul>
+    </article>
+
+    <article class="panel js-tilt" data-reveal>
+      <span class="panel-chip">Timeline</span>
+      <ol class="timeline-list compact">
+        <li>
+          <span class="timeline-year">2025 - now</span>
+          <strong>Doctoral researcher</strong>
+          <span>M-RIC and CHIL · University of Liverpool</span>
+        </li>
+        <li>
+          <span class="timeline-year">2023</span>
+          <strong>MSc Medical Statistics</strong>
+          <span>University of Bristol</span>
+        </li>
+        <li>
+          <span class="timeline-year">2017 - 2021</span>
+          <strong>BA Politics</strong>
+          <span>University of Bristol</span>
+        </li>
+      </ol>
+    </article>
+
+    <article class="panel js-tilt is-muted" data-reveal aria-disabled="true">
+      <span class="panel-chip">Currently building</span>
+      <h3>Research dashboard</h3>
+      <p>A searchable showcase of active projects, code repositories, and reproducible methods is in progress.</p>
+      <div class="muted-badges">
+        <span>Projects</span>
+        <span>Methods</span>
+        <span>Replications</span>
+      </div>
+    </article>
+  </section>
+{% endblock %}

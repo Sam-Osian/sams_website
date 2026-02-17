@@ -1,13 +1,21 @@
 {% extends "pages/base.html" %}
 
 {% block title %}{{ post.title }} | Sam Osian{% endblock %}
+{% block body_class %}site-body standard-page{% endblock %}
 
 {% block content %}
-  <article class="markdown-body">
-    <h1>{{ post.title }}</h1>
-    {% if post.date %}
-      <p class="meta">{{ post.date|date:"F j, Y" }}</p>
+  <article class="panel post-shell" data-reveal>
+    {% if post.cover_image_url %}
+      <div class="post-hero-image">
+        <img src="{{ post.cover_image_url }}" alt="Featured image for {{ post.title }}" />
+      </div>
     {% endif %}
-    {{ post.body_html|safe }}
+    <div class="markdown-body">
+      <h1>{{ post.title }}</h1>
+      {% if post.date %}
+        <p class="meta">{{ post.date|date:"F j, Y" }}</p>
+      {% endif %}
+      {{ post.body_html|safe }}
+    </div>
   </article>
 {% endblock %}
