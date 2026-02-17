@@ -45,6 +45,10 @@ function initTilt(prefersReducedMotion) {
 
   const cards = Array.from(document.querySelectorAll(".js-tilt"));
   cards.forEach((card) => {
+    const isHeroPanel = card.classList.contains("hero-panel");
+    const maxRotateX = isHeroPanel ? 6 : 2.2;
+    const maxRotateY = isHeroPanel ? 7 : 2.6;
+
     let currentRotateX = 0;
     let currentRotateY = 0;
     let targetRotateX = 0;
@@ -91,8 +95,8 @@ function initTilt(prefersReducedMotion) {
       const px = (event.clientX - rect.left) / rect.width;
       const py = (event.clientY - rect.top) / rect.height;
 
-      targetRotateX = (0.5 - py) * 6;
-      targetRotateY = (px - 0.5) * 7;
+      targetRotateX = (0.5 - py) * maxRotateX;
+      targetRotateY = (px - 0.5) * maxRotateY;
       ensureLoop();
     };
 

@@ -1,5 +1,6 @@
 ---
 draft: false
+id: 1
 title: Rethinking 'significance' — Has the p-value overstayed its welcome?
 slug: rethinking-significance
 authors:
@@ -86,4 +87,3 @@ I do want to be transparent here: everything I've said above isn't a wholly nove
 But still, the checkbox culture of significance is still rife, across clinical and social sciences alike. We can do better by recognising that standards of evidence are highly nuanced, context dependent, and must be an exercise of interpretation and discussion, not a mechanical tick-box exercise dictated by an arbitrary threshold.
 
 In the end, statistics is a tool for making sense of uncertainty, not erasing it. A p-value is just one part of the story. The real work lies in making thoughtful decisions about what evidence means for the world outside the dataset.
-

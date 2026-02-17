@@ -15,6 +15,7 @@ DOCS_DIR = Path(__file__).resolve().parents[2] / "docs"
 POSTS_DIR = DOCS_DIR / "posts"
 CV_PATH = DOCS_DIR / "cv.md"
 SITE_CONFIG_PATH = Path(__file__).resolve().parent / "site_config.yaml"
+POSTS_CONFIG_PATH = Path(__file__).resolve().parent / "featured_post.yaml"
 PAGE_MAP = {
     "home": DOCS_DIR / "index.md",
     "about": DOCS_DIR / "about.md",
@@ -43,6 +44,7 @@ class PageContent:
 
 @dataclass
 class PostContent:
+    post_id: int | None
     slug: str
     title: str
     date: date | None
@@ -159,6 +161,17 @@ def _parse_date(value: Any) -> date | None:
     return None
 
 
+def _parse_post_id(value: Any) -> int | None:
+    if isinstance(value, int):
+        return value
+    if isinstance(value, str):
+        try:
+            return int(value.strip())
+        except ValueError:
+            return None
+    return None
+
+
 def _is_truthy(value: Any) -> bool:
     if isinstance(value, bool):
         return value
@@ -228,6 +241,7 @@ def _load_post(source_path: Path) -> PostContent:
     body_source = body.replace(READ_MORE_MARKER, "")
 
     return PostContent(
+        post_id=_parse_post_id(metadata.get("id")),
         slug=slug,
         title=title,
         date=published_date,
@@ -288,6 +302,17 @@ def load_site_config() -> dict[str, Any]:
         return {}
 
     raw = SITE_CONFIG_PATH.read_text(encoding="utf-8")
+    parsed = yaml.safe_load(raw) or {}
+    if isinstance(parsed, dict):
+        return parsed
+    return {}
+
+
+def load_posts_config() -> dict[str, Any]:
+    if not POSTS_CONFIG_PATH.exists():
+        return {}
+
+    raw = POSTS_CONFIG_PATH.read_text(encoding="utf-8")
     parsed = yaml.safe_load(raw) or {}
     if isinstance(parsed, dict):
         return parsed

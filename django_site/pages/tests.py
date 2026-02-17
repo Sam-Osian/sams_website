@@ -8,6 +8,7 @@ class PageRouteTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Data Scientist at")
         self.assertContains(response, "See CV")
+        self.assertContains(response, "Featured post")
 
     def test_about_page_renders(self):
         response = self.client.get(reverse("about"))

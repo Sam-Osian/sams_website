@@ -1,22 +1,33 @@
 from django.http import Http404
 from django.shortcuts import render
 
-from .content import get_post, load_cv, load_page, load_posts, load_site_config
+from .content import get_post, load_cv, load_page, load_posts, load_posts_config, load_site_config
 
 
 def home(request):
     posts = load_posts()
     cv = load_cv()
     site_config = load_site_config()
+    posts_config = load_posts_config()
 
-    featured_post_slug = str(site_config.get("featured_post_slug", "")).strip()
-    featured_post = next((post for post in posts if post.slug == featured_post_slug), None)
+    featured_post_id_raw = posts_config.get("featured_post_id")
+    if isinstance(featured_post_id_raw, int):
+        featured_post_id = featured_post_id_raw
+    elif isinstance(featured_post_id_raw, str):
+        try:
+            featured_post_id = int(featured_post_id_raw.strip())
+        except ValueError:
+            featured_post_id = None
+    else:
+        featured_post_id = None
+    featured_post = next((post for post in posts if post.post_id == featured_post_id), None)
     if featured_post is None and posts:
         featured_post = posts[0]
 
     recent_posts = posts
     if featured_post is not None:
-        recent_posts = [post for post in posts if post.slug != featured_post.slug]
+        non_featured_posts = [post for post in posts if post.slug != featured_post.slug]
+        recent_posts = non_featured_posts if non_featured_posts else [featured_post]
 
     return render(
         request,
