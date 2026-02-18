@@ -8,13 +8,13 @@
     <link rel="icon" href="{% static 'favicon.png' %}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/simplebar@6.2.7/dist/simplebar.min.css"
     />
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
-    <link rel="stylesheet" href="{% static 'pages/site.css' %}" />
+    <link rel="stylesheet" href="{% static 'pages/site.css' %}?v=20260218b" />
     {% block extra_head %}{% endblock %}
   </head>
   <body class="{% block body_class %}site-body{% endblock %}">
@@ -52,7 +52,7 @@
     </div>
 
     <script defer src="https://cdn.jsdelivr.net/npm/simplebar@6.2.7/dist/simplebar.min.js"></script>
-    <script defer src="{% static 'pages/site.js' %}"></script>
+    <script defer src="{% static 'pages/site.js' %}?v=20260218b"></script>
     {% block extra_scripts %}{% endblock %}
   </body>
 </html>

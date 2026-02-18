@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date, datetime
 import html
+from math import ceil
 from pathlib import Path
 import re
 from typing import Any
@@ -14,6 +15,7 @@ import yaml
 DOCS_DIR = Path(__file__).resolve().parents[2] / "docs"
 POSTS_DIR = DOCS_DIR / "posts"
 CV_PATH = DOCS_DIR / "cv.md"
+AUTHORS_PATH = DOCS_DIR / ".authors.yml"
 SITE_CONFIG_PATH = Path(__file__).resolve().parent / "site_config.yaml"
 POSTS_CONFIG_PATH = Path(__file__).resolve().parent / "featured_post.yaml"
 PAGE_MAP = {
@@ -49,7 +51,12 @@ class PostContent:
     title: str
     date: date | None
     draft: bool
+    authors: list[str]
+    tags: list[str]
+    toc_entries: list["PostTocEntry"]
+    reading_time_minutes: int
     summary_html: str
+    main_body_html: str
     body_html: str
     cover_image_url: str | None
 
@@ -79,6 +86,21 @@ class CVContent:
     entries: list[CVEntry]
     education_entries: list[CVEntry] = field(default_factory=list)
     key_skills: list[str] = field(default_factory=list)
+
+
+@dataclass
+class PostTocEntry:
+    title: str
+    anchor: str
+
+
+@dataclass
+class AuthorProfile:
+    key: str
+    name: str
+    description: str
+    avatar_url: str | None
+    url: str | None
 
 
 def _split_front_matter(raw: str) -> tuple[dict[str, Any], str]:
@@ -180,6 +202,27 @@ def _is_truthy(value: Any) -> bool:
     return bool(value)
 
 
+def _as_string_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [str(item).strip() for item in value if str(item).strip()]
+
+
+def _extract_toc_entries(body_html: str) -> list[PostTocEntry]:
+    entries: list[PostTocEntry] = []
+    matches = re.findall(
+        r"<h2\s+[^>]*id=[\"']([^\"']+)[\"'][^>]*>(.*?)</h2>",
+        body_html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    for anchor, title_html in matches:
+        title = _html_to_text(title_html)
+        if not title:
+            continue
+        entries.append(PostTocEntry(title=title, anchor=anchor))
+    return entries
+
+
 def _extract_cover_image(metadata: dict[str, Any], body: str) -> str | None:
     image = metadata.get("image")
     if isinstance(image, str) and image.strip():
@@ -200,10 +243,40 @@ def _extract_cover_image(metadata: dict[str, Any], body: str) -> str | None:
     return None
 
 
+def _strip_cover_image_from_body(body: str, cover_image_url: str | None) -> str:
+    if not cover_image_url:
+        return body
+
+    image_pattern = re.compile(
+        r"(?m)^\s*!\[[^\]]*\]\(([^\)]+)\)(?:\{[^\}]*\})?\s*$"
+    )
+
+    for match in image_pattern.finditer(body):
+        raw_url = match.group(1)
+        if _normalize_asset_url(raw_url) != cover_image_url:
+            continue
+        start, end = match.span()
+        stripped = f"{body[:start].rstrip()}\n\n{body[end:].lstrip()}"
+        return stripped
+
+    return body
+
+
 def _html_to_text(content: str) -> str:
     content = re.sub(r"<[^>]+>", " ", content)
     content = html.unescape(content)
     return re.sub(r"\s+", " ", content).strip()
+
+
+def _estimate_reading_time_minutes(*chunks: str) -> int:
+    words = 0
+    for chunk in chunks:
+        plain = _html_to_text(chunk)
+        if plain:
+            words += len(plain.split())
+    if words <= 0:
+        return 1
+    return max(1, ceil(words / 225))
 
 
 def load_page(page_key: str) -> PageContent:
@@ -236,9 +309,21 @@ def _load_post(source_path: Path) -> PostContent:
     title = str(metadata.get("title") or _title_from_markdown_body(body))
     published_date = _parse_date(metadata.get("date"))
     draft = _is_truthy(metadata.get("draft", False))
+    authors = _as_string_list(metadata.get("authors"))
+    tags = _as_string_list(metadata.get("tags"))
+    if not tags:
+        tags = _as_string_list(metadata.get("categories"))
+    cover_image_url = _extract_cover_image(metadata, body)
 
-    summary_source = body.split(READ_MORE_MARKER, maxsplit=1)[0]
-    body_source = body.replace(READ_MORE_MARKER, "")
+    has_read_more = READ_MORE_MARKER in body
+    summary_source, remainder = body.split(READ_MORE_MARKER, maxsplit=1) if has_read_more else (body, body)
+    summary_source = _strip_cover_image_from_body(summary_source, cover_image_url)
+    main_body_source = _strip_cover_image_from_body(remainder, cover_image_url)
+
+    summary_html = _render_markdown(summary_source)
+    main_body_html = _render_markdown(main_body_source)
+    body_source = _strip_cover_image_from_body(body.replace(READ_MORE_MARKER, ""), cover_image_url)
+    body_html = _render_markdown(body_source)
 
     return PostContent(
         post_id=_parse_post_id(metadata.get("id")),
@@ -246,10 +331,51 @@ def _load_post(source_path: Path) -> PostContent:
         title=title,
         date=published_date,
         draft=draft,
-        summary_html=_render_markdown(summary_source),
-        body_html=_render_markdown(body_source),
-        cover_image_url=_extract_cover_image(metadata, body),
+        authors=authors,
+        tags=tags,
+        toc_entries=_extract_toc_entries(main_body_html),
+        reading_time_minutes=_estimate_reading_time_minutes(summary_html, main_body_html),
+        summary_html=summary_html,
+        main_body_html=main_body_html,
+        body_html=body_html,
+        cover_image_url=cover_image_url,
     )
+
+
+def load_authors_index() -> dict[str, AuthorProfile]:
+    if not AUTHORS_PATH.exists():
+        return {}
+
+    raw = AUTHORS_PATH.read_text(encoding="utf-8")
+    parsed = yaml.safe_load(raw) or {}
+    if not isinstance(parsed, dict):
+        return {}
+
+    authors_map = parsed.get("authors")
+    if not isinstance(authors_map, dict):
+        return {}
+
+    index: dict[str, AuthorProfile] = {}
+    for key, value in authors_map.items():
+        if not isinstance(value, dict):
+            continue
+        author_key = str(key).strip()
+        if not author_key:
+            continue
+        name = str(value.get("name", "")).strip() or author_key
+        description = str(value.get("description", "")).strip()
+        raw_avatar = str(value.get("avatar", "")).strip()
+        avatar_url = _normalize_asset_url(raw_avatar) if raw_avatar else None
+        raw_url = str(value.get("url", "")).strip()
+        url = raw_url or None
+        index[author_key] = AuthorProfile(
+            key=author_key,
+            name=name,
+            description=description,
+            avatar_url=avatar_url,
+            url=url,
+        )
+    return index
 
 
 def _parse_cv_entry(entry: Any) -> CVEntry | None:

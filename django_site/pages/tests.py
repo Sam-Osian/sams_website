@@ -33,6 +33,10 @@ class PostRouteTests(TestCase):
         response = self.client.get(reverse("post-detail", kwargs={"slug": "rethinking-significance"}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Has the p-value overstayed its welcome")
+        self.assertContains(response, "Written by")
+        self.assertContains(response, "Tags")
+        self.assertContains(response, "Sam Osian")
+        self.assertContains(response, 'aria-label="Back to homepage"')
 
     def test_draft_post_is_hidden(self):
         response = self.client.get(reverse("post-detail", kwargs={"slug": "the-lives-we-could-save"}))

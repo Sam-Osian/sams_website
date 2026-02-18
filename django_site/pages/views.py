@@ -1,7 +1,16 @@
 from django.http import Http404
 from django.shortcuts import render
 
-from .content import get_post, load_cv, load_page, load_posts, load_posts_config, load_site_config
+from .content import (
+    AuthorProfile,
+    get_post,
+    load_authors_index,
+    load_cv,
+    load_page,
+    load_posts,
+    load_posts_config,
+    load_site_config,
+)
 
 
 def home(request):
@@ -79,4 +88,29 @@ def post_detail(request, slug: str):
     post = get_post(slug=slug)
     if post is None:
         raise Http404("Post not found.")
-    return render(request, "pages/post_detail.html", {"post": post})
+
+    authors_index = load_authors_index()
+    author_profiles = [authors_index[author] for author in post.authors if author in authors_index]
+    missing_authors = [
+        author
+        for author in post.authors
+        if author not in authors_index
+    ]
+    author_profiles.extend(
+        [
+            AuthorProfile(
+                key=author,
+                name=author,
+                description="",
+                avatar_url=None,
+                url=None,
+            )
+            for author in missing_authors
+        ]
+    )
+
+    return render(
+        request,
+        "pages/post_detail.html",
+        {"post": post, "author_profiles": author_profiles},
+    )

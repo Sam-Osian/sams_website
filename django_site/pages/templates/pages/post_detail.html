@@ -4,18 +4,107 @@
 {% block body_class %}site-body standard-page{% endblock %}
 
 {% block content %}
-  <article class="panel post-shell" data-reveal>
-    {% if post.cover_image_url %}
-      <div class="post-hero-image">
-        <img src="{{ post.cover_image_url }}" alt="Featured image for {{ post.title }}" />
-      </div>
-    {% endif %}
-    <div class="markdown-body">
-      <h1>{{ post.title }}</h1>
-      {% if post.date %}
-        <p class="meta">{{ post.date|date:"F j, Y" }}</p>
-      {% endif %}
-      {{ post.body_html|safe }}
-    </div>
-  </article>
+  <div class="reading-progress" aria-hidden="true">
+    <span class="reading-progress-bar"></span>
+  </div>
+
+  <div class="post-doc-layout">
+    <aside class="post-back-rail" data-reveal>
+      <a href="/" class="cv-back-btn" aria-label="Back to homepage">
+        <i class="hgi hgi-stroke hgi-arrow-left-01" aria-hidden="true"></i>
+      </a>
+    </aside>
+
+    <section class="post-view-layout">
+      <article class="panel post-shell">
+        {% if post.cover_image_url %}
+          <div class="post-hero-image">
+            <img src="{{ post.cover_image_url }}" alt="Featured image for {{ post.title }}" />
+          </div>
+        {% endif %}
+        <div class="markdown-body">
+          <h1>{{ post.title }}</h1>
+          {% if post.date %}
+            <p class="meta">{{ post.date|date:"F j, Y" }} · {{ post.reading_time_minutes }} min read</p>
+          {% endif %}
+          <div class="post-body-content">
+            <div class="post-preamble-content">
+              {{ post.summary_html|safe }}
+            </div>
+            <div class="post-main-content">
+              {{ post.main_body_html|safe }}
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <aside class="panel post-side-panel" data-reveal>
+        {% if post.toc_entries %}
+          <nav class="post-section-nav" aria-label="Sections in this post">
+            <span class="post-section-nav-badge">Table of contents</span>
+            {% for entry in post.toc_entries %}
+              <a href="#{{ entry.anchor }}">{{ entry.title }}</a>
+            {% endfor %}
+          </nav>
+        {% endif %}
+
+        {% if author_profiles %}
+          <section class="post-side-block">
+            <h2>Written by</h2>
+            <div class="post-author-list">
+              {% for author in author_profiles %}
+                {% if author.url %}
+                  <a class="post-author-card" href="{{ author.url }}" target="_blank" rel="noopener noreferrer">
+                    {% if author.avatar_url %}
+                      <img src="{{ author.avatar_url }}" alt="Portrait of {{ author.name }}" />
+                    {% else %}
+                      <span class="post-author-avatar-fallback" aria-hidden="true">{{ author.name|first|upper }}</span>
+                    {% endif %}
+                    <span>
+                      <strong>{{ author.name }}</strong>
+                      {% if author.description %}
+                        <em>{{ author.description }}</em>
+                      {% endif %}
+                    </span>
+                  </a>
+                {% else %}
+                  <div class="post-author-card">
+                    {% if author.avatar_url %}
+                      <img src="{{ author.avatar_url }}" alt="Portrait of {{ author.name }}" />
+                    {% else %}
+                      <span class="post-author-avatar-fallback" aria-hidden="true">{{ author.name|first|upper }}</span>
+                    {% endif %}
+                    <span>
+                      <strong>{{ author.name }}</strong>
+                      {% if author.description %}
+                        <em>{{ author.description }}</em>
+                      {% endif %}
+                    </span>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+
+        {% if post.tags %}
+          <section class="post-side-block">
+            <h2>Tags</h2>
+            <div class="post-tag-list">
+              {% for tag in post.tags %}
+                <span>{{ tag }}</span>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+
+        <section class="post-side-block post-reading-time-block" aria-label="Estimated reading time">
+          <p class="post-reading-time">
+            <i class="hgi hgi-stroke hgi-clock-01" aria-hidden="true"></i>
+            <span>{{ post.reading_time_minutes }} min read</span>
+          </p>
+        </section>
+      </aside>
+    </section>
+  </div>
 {% endblock %}

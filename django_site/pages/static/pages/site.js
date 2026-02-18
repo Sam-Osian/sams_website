@@ -6,6 +6,7 @@
   initMagnetic();
   initWorkflowTabs();
   initMarkdownFlair();
+  initPostReadingUi();
 })();
 
 function initReveal(prefersReducedMotion) {
@@ -188,9 +189,96 @@ function initWorkflowTabs() {
 function initMarkdownFlair() {
   const blocks = Array.from(document.querySelectorAll(".markdown-body"));
   blocks.forEach((block) => {
-    const firstParagraph = block.querySelector("p");
+    const firstParagraph =
+      block.querySelector(".post-main-content > p") ||
+      block.querySelector(".post-body-content > p") ||
+      block.querySelector("p:not(.meta)");
     if (firstParagraph) {
       firstParagraph.classList.add("md-lead");
+      const firstChar = (firstParagraph.textContent || "").trim().charAt(0).toUpperCase();
+      if (["I", "J", "L", "T"].includes(firstChar)) {
+        firstParagraph.classList.add("md-lead--narrow-initial");
+      }
     }
   });
+}
+
+function initPostReadingUi() {
+  const progressBar = document.querySelector(".reading-progress-bar");
+  const tocLinks = Array.from(document.querySelectorAll(".post-section-nav a[href^='#']"));
+  if (!progressBar && !tocLinks.length) {
+    return;
+  }
+
+  const findScroller = () => document.querySelector(".scroll-root .simplebar-content-wrapper");
+  let scroller = findScroller();
+  let boundScroller = null;
+  const getScrollTop = () => (scroller ? scroller.scrollTop : window.scrollY || window.pageYOffset || 0);
+  const getScrollMax = () => {
+    if (scroller) {
+      return Math.max(1, scroller.scrollHeight - scroller.clientHeight);
+    }
+    return Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  };
+
+  const headingPairs = tocLinks
+    .map((link) => {
+      const id = link.getAttribute("href")?.slice(1) || "";
+      const heading = id ? document.getElementById(id) : null;
+      if (!heading) {
+        return null;
+      }
+      return { link, heading };
+    })
+    .filter(Boolean);
+
+  const update = () => {
+    if (progressBar) {
+      const ratio = Math.min(1, Math.max(0, getScrollTop() / getScrollMax()));
+      progressBar.style.transform = `scaleX(${ratio.toFixed(4)})`;
+    }
+
+    if (!headingPairs.length) {
+      return;
+    }
+
+    const activationLine = 170;
+    const currentLine = getScrollTop() + activationLine;
+    const scrollerTop = scroller ? scroller.getBoundingClientRect().top : 0;
+    let activeLink = headingPairs[0].link;
+
+    headingPairs.forEach(({ link, heading }) => {
+      const headingTop = scroller
+        ? heading.getBoundingClientRect().top - scrollerTop + getScrollTop()
+        : heading.getBoundingClientRect().top + getScrollTop();
+      if (headingTop <= currentLine) {
+        activeLink = link;
+      }
+    });
+
+    headingPairs.forEach(({ link }) => {
+      const active = link === activeLink;
+      link.classList.toggle("is-active", active);
+      link.setAttribute("aria-current", active ? "true" : "false");
+    });
+  };
+
+  const bindScrollTarget = () => {
+    scroller = findScroller();
+    if (scroller && scroller !== boundScroller) {
+      if (boundScroller) {
+        boundScroller.removeEventListener("scroll", update);
+      }
+      scroller.addEventListener("scroll", update, { passive: true });
+      boundScroller = scroller;
+    }
+  };
+
+  bindScrollTarget();
+  window.addEventListener("resize", update, { passive: true });
+  window.addEventListener("scroll", update, { passive: true });
+  setTimeout(bindScrollTarget, 120);
+  setTimeout(bindScrollTarget, 500);
+  setTimeout(bindScrollTarget, 1200);
+  update();
 }
