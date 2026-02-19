@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
+from urllib.parse import urlparse
 
 import dj_database_url
 
@@ -48,6 +49,8 @@ if not SECRET_KEY:
         raise RuntimeError("SECRET_KEY environment variable must be set when DEBUG is False.")
 
 SITE_URL = os.getenv("SITE_URL", "https://sam-osian.com").rstrip("/")
+CANONICAL_HOST = os.getenv("CANONICAL_HOST", urlparse(SITE_URL).netloc).strip().lower()
+REDIRECT_WWW_TO_APEX = _env_bool("REDIRECT_WWW_TO_APEX", default=not DEBUG)
 
 ALLOWED_HOSTS = _env_list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1", "testserver"])
 CSRF_TRUSTED_ORIGINS = _env_list("CSRF_TRUSTED_ORIGINS", default=[SITE_URL] if SITE_URL else [])
@@ -67,6 +70,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "pages.middleware.CanonicalHostRedirectMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
