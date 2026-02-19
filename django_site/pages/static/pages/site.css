@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light;
+  color-scheme: only light;
   --bg: #ecebeb;
   --surface: #f8f8f8;
   --surface-strong: #ffffff;
@@ -33,6 +33,7 @@
 
 html,
 body {
+  color-scheme: only light;
   margin: 0;
   padding: 0;
 }

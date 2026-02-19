@@ -4,8 +4,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light" />
-    <meta name="supported-color-schemes" content="light" />
+    <meta name="color-scheme" content="only light" />
+    <meta name="supported-color-schemes" content="only light" />
     <title>{% block title %}Sam Osian{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}{{ seo_default_description }}{% endblock %}" />
     <meta name="robots" content="{% block meta_robots %}index,follow{% endblock %}" />
@@ -33,10 +33,11 @@
       href="https://cdn.jsdelivr.net/npm/simplebar@6.2.7/dist/simplebar.min.css"
     />
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
-    <link rel="stylesheet" href="{% static 'pages/site.css' %}?v=20260218h" />
+    <link rel="stylesheet" href="{% static 'pages/site.css' %}?v=20260219a" />
     {% block extra_head %}{% endblock %}
   </head>
   <body class="{% block body_class %}site-body{% endblock %}">
+    <div class="bg-orb orb-a" aria-hidden="true"></div>
     <div class="bg-orb orb-b" aria-hidden="true"></div>
 
     <div class="scroll-root" data-simplebar data-simplebar-auto-hide="false">
