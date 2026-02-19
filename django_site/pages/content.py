@@ -12,16 +12,16 @@ import markdown
 import yaml
 
 
-DOCS_DIR = Path(__file__).resolve().parents[2] / "docs"
-POSTS_DIR = DOCS_DIR / "posts"
-CV_PATH = DOCS_DIR / "cv.md"
-AUTHORS_PATH = DOCS_DIR / ".authors.yml"
+CONTENT_DIR = Path(__file__).resolve().parents[1] / "content"
+POSTS_DIR = CONTENT_DIR / "posts"
+CV_PATH = CONTENT_DIR / "cv.md"
+AUTHORS_PATH = CONTENT_DIR / ".authors.yml"
 SITE_CONFIG_PATH = Path(__file__).resolve().parent / "site_config.yaml"
 POSTS_CONFIG_PATH = Path(__file__).resolve().parent / "featured_post.yaml"
 PAGE_MAP = {
-    "home": DOCS_DIR / "index.md",
-    "about": DOCS_DIR / "about.md",
-    "publications": DOCS_DIR / "publications.md",
+    "home": CONTENT_DIR / "index.md",
+    "about": CONTENT_DIR / "about.md",
+    "publications": CONTENT_DIR / "publications.md",
 }
 READ_MORE_MARKER = "<!-- more -->"
 MARKDOWN_EXTENSIONS = [

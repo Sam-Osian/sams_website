@@ -15,4 +15,4 @@ staticfiles/
 .env
 
 # Draft blog posts
-docs/posts/the-lives-we-could-save.md
+django_site/content/posts/the-lives-we-could-save.md
