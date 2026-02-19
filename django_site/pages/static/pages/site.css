@@ -308,18 +308,6 @@ a {
   padding: 1.9rem 1.9rem 1.4rem;
 }
 
-.hero-panel::after {
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0));
-  border-radius: 60%;
-  content: "";
-  height: 210px;
-  pointer-events: none;
-  position: absolute;
-  right: -80px;
-  top: -55px;
-  width: 280px;
-}
-
 .hero-title {
   font-size: clamp(2.1rem, 5.2vw, 4rem);
   line-height: 1.05;
