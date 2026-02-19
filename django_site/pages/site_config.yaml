@@ -5,15 +5,16 @@ hero:
   role_line: I'm a Data Scientist at
   org_emphasis: University of Liverpool
   org_suffix_muted: and the
-  org_suffix_accent: NHS.
+  org_suffix_accent: NHS
   support_copy: Feel free to explore my work and reach out — I'd love to chat :)
 contact:
   email: samoand@liverpool.ac.uk
 about_preview: I use AI, public data, and interdisciplinary methods to uncover patterns in preventable harm. My work sits between research, health systems, and practical tool-building.
 about:
-  intro: I’m Sam Osian (pronounced osh-ahn), an AI doctoral researcher at the University of Liverpool working on applied methods for learning from coroner inquest data.
-  body: My background combines politics, charity-sector research, and medical statistics, which gives me a practical lens for designing tools that help people make safer, evidence-led decisions.
+  intro: I’m Sam Osian, a Data Scientist specialising in healthcare and clinical decision-making.
+  body: My research cuts across data science, public health, and patient safety, with a focus on using AI and open data to understand and prevent avoidable harm in healthcare. I’m currently based at the University of Liverpool and Mersey Care NHS Trust, where I work on projects that blend research with real-world impact.
   focus_points:
-    - Coroner inquest and Prevention of Future Deaths analysis
-    - AI-assisted evidence synthesis for patient safety
+    - Learning from coroners' reports to identify patterns in preventable deaths
+    - Understanding how NHS communication networks influence patient care and harm
     - Open-source methods for public-interest health research
+    - Building practical tools to support clinicical decision-making
