@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timezone
 from xml.sax.saxutils import escape
 
@@ -17,6 +18,8 @@ from .content import (
     load_site_config,
 )
 from .forms import ContactForm
+
+logger = logging.getLogger(__name__)
 
 
 def _site_base_url() -> str:
@@ -66,6 +69,7 @@ def home(request):
                 response.status_code = 303
                 return response
             except Exception:
+                logger.exception("Contact form email send failed.")
                 request.session["contact_status"] = "send_error"
                 response = redirect("home")
                 response.status_code = 303
