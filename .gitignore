@@ -13,6 +13,8 @@ wheels/
 django_site/db.sqlite3
 staticfiles/
 .env
+.env.local # Incl. email API
+.env.railway
 
 # Draft blog posts
 django_site/content/posts/the-lives-we-could-save.md
