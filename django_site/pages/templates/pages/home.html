@@ -27,7 +27,7 @@
     </div>
 
     <div class="hero-cta-row">
-      <button class="cta-primary js-magnetic" type="button" disabled>
+      <button class="cta-primary js-magnetic" type="button" data-contact-open aria-label="Open contact form">
         <span>Get in touch</span>
       </button>
       <p>{{ hero_config.support_copy|default:"Feel free to explore my work and reach out — I'd love to chat :)" }}</p>
@@ -113,6 +113,20 @@
       {% endif %}
     </article>
 
+    <article class="panel about-panel js-tilt" data-reveal>
+      <span class="panel-chip">About</span>
+      <h3>Interdisciplinary by design</h3>
+      <p>{{ about_preview }}</p>
+
+      <p class="about-panel-followup">I work at the intersection of healthcare, statistics, and AI to turn evidence into tools that can be used in practice.</p>
+      <div class="about-actions">
+        <a href="/about/">
+          <span>Read full background</span>
+          <i class="hgi hgi-stroke hgi-arrow-right-01" aria-hidden="true"></i>
+        </a>
+      </div>
+    </article>
+
     <article class="panel location-panel js-tilt" data-reveal>
       <span class="panel-chip">Location</span>
       <div class="map-art">
@@ -122,57 +136,87 @@
       <p class="location-sub">UNITED KINGDOM · REMOTE FRIENDLY</p>
     </article>
 
-    <article class="panel workflow-panel js-tilt" data-reveal>
-      <span class="panel-chip">How I work</span>
-      <div class="workflow-copy" data-step-pane="1">
-        <h3>01 Discovery call</h3>
-        <p>I map goals, constraints, and timelines to define a practical research or product direction.</p>
-      </div>
-      <div class="workflow-copy" data-step-pane="2" hidden>
-        <h3>02 Data and context audit</h3>
-        <p>I review available data, assumptions, and quality risks before any modeling begins.</p>
-      </div>
-      <div class="workflow-copy" data-step-pane="3" hidden>
-        <h3>03 Prototype and validate</h3>
-        <p>I build an interpretable prototype, test edge cases, and validate with domain experts.</p>
-      </div>
-      <div class="workflow-copy" data-step-pane="4" hidden>
-        <h3>04 Translate into practice</h3>
-        <p>Outputs are packaged for real use: clear outputs, docs, and implementation pathways.</p>
-      </div>
-      <div class="workflow-copy" data-step-pane="5" hidden>
-        <h3>05 Iterate with feedback</h3>
-        <p>Usage feedback drives refinement, new analysis questions, and better decision support.</p>
-      </div>
-      <div class="workflow-tabs" role="tablist" aria-label="Workflow steps">
-        <button type="button" data-step="1" class="is-active" role="tab" aria-selected="true">Step 01</button>
-        <button type="button" data-step="2" role="tab" aria-selected="false">Step 02</button>
-        <button type="button" data-step="3" role="tab" aria-selected="false">Step 03</button>
-        <button type="button" data-step="4" role="tab" aria-selected="false">Step 04</button>
-        <button type="button" data-step="5" role="tab" aria-selected="false">Step 05</button>
-      </div>
+    <article class="panel contact-panel" data-reveal>
+      <span class="panel-chip">Contact</span>
+      <button
+        type="button"
+        class="contact-launch-btn"
+        aria-label="Open contact form"
+        data-contact-open
+      >
+        <i class="hgi hgi-stroke hgi-message-01 contact-message-icon" aria-hidden="true"></i>
+      </button>
+      <p class="contact-panel-copy">Contact me!</p>
     </article>
 
-    <article class="panel about-panel js-tilt" data-reveal>
-      <span class="panel-chip">About preview</span>
-      <h3>Interdisciplinary by design</h3>
-      <p>{{ about_preview }}</p>
-      <div class="about-actions">
-        <a href="/about/">Read full background</a>
-        <button type="button" disabled>Case studies</button>
-        <button type="button" disabled>Talks</button>
-      </div>
+    <article class="panel publications-panel coming-soon-panel js-tilt" data-reveal>
+      <span class="panel-chip">Publications</span>
+      <h3>Content coming soon!</h3>
+      <p>This section is still being prepared.</p>
     </article>
 
-    <article class="panel research-panel js-tilt is-muted" data-reveal aria-disabled="true">
-      <span class="panel-chip">Research pipeline</span>
-      <h3>New panel coming soon</h3>
-      <p>Open projects, datasets, and method notes will be published here once the structure is finalized.</p>
-      <div class="muted-badges">
-        <span>Data briefs</span>
-        <span>Methods</span>
-        <span>Open notebooks</span>
-      </div>
+    <article class="panel portfolio-panel coming-soon-panel js-tilt" data-reveal>
+      <span class="panel-chip">Portfolio</span>
+      <h3>Content coming soon!</h3>
+      <p>This section is still being prepared.</p>
     </article>
+
+    <div
+      class="contact-modal"
+      data-contact-modal
+      {% if contact_status == "success" or contact_status == "validation_error" or contact_status == "send_error" %}data-contact-open-on-load{% endif %}
+      hidden
+    >
+      <div class="contact-modal-backdrop" data-contact-close></div>
+      <div class="contact-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+        <div class="contact-modal-head">
+          <h3 id="contact-modal-title">Send a message</h3>
+          <button type="button" class="contact-modal-close" aria-label="Close contact form" data-contact-close>
+            <i class="hgi hgi-stroke hgi-cancel-01" aria-hidden="true"></i>
+          </button>
+        </div>
+        <p class="contact-modal-intro">If you have a question, collaboration idea, or speaking opportunity, I’d be glad to hear from you.</p>
+
+        {% if contact_status == "success" %}
+          <div class="contact-success-state">
+            <p class="contact-feedback contact-feedback-success">Thanks. Your message has been sent.</p>
+          </div>
+        {% else %}
+          {% if contact_status == "send_error" %}
+            <p class="contact-feedback contact-feedback-error">Sorry, there was a delivery issue. Please try again shortly.</p>
+          {% endif %}
+
+          <form method="post" action="{% url 'home' %}" class="contact-form">
+            {% csrf_token %}
+            <input type="hidden" name="form_name" value="contact" />
+
+            <p class="contact-required-note">All fields are required.</p>
+
+            <label for="{{ contact_form.name.id_for_label }}">Name <span class="contact-required-mark" aria-hidden="true">*</span></label>
+            {{ contact_form.name }}
+            {% if contact_form.name.errors %}
+              <p class="contact-field-error">{{ contact_form.name.errors|striptags }}</p>
+            {% endif %}
+
+            <label for="{{ contact_form.email.id_for_label }}">Email <span class="contact-required-mark" aria-hidden="true">*</span></label>
+            {{ contact_form.email }}
+            {% if contact_form.email.errors %}
+              <p class="contact-field-error">{{ contact_form.email.errors|striptags }}</p>
+            {% endif %}
+
+            <label for="{{ contact_form.message.id_for_label }}">Message <span class="contact-required-mark" aria-hidden="true">*</span></label>
+            {{ contact_form.message }}
+            {% if contact_form.message.errors %}
+              <p class="contact-field-error">{{ contact_form.message.errors|striptags }}</p>
+            {% endif %}
+
+            <button type="submit" class="contact-submit-btn">
+              <span>Send message</span>
+              <i class="hgi hgi-stroke hgi-arrow-right-01" aria-hidden="true"></i>
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
   </section>
 {% endblock %}

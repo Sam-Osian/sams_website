@@ -1,5 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.core import mail
+from django.test import override_settings
 
 
 class PageRouteTests(TestCase):
@@ -9,11 +11,13 @@ class PageRouteTests(TestCase):
         self.assertContains(response, "Data Scientist at")
         self.assertContains(response, "See CV")
         self.assertContains(response, "Featured post")
+        self.assertContains(response, "Contact")
 
     def test_about_page_renders(self):
         response = self.client.get(reverse("about"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Research that translates into action")
+        self.assertContains(response, "See CV")
 
     def test_publications_page_renders(self):
         response = self.client.get(reverse("publications"))
@@ -26,6 +30,44 @@ class PageRouteTests(TestCase):
         self.assertContains(response, "CV")
         self.assertContains(response, "Data Scientist")
         self.assertContains(response, "Back to homepage")
+
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        CONTACT_EMAIL_RECIPIENT="samoand@liverpool.ac.uk",
+        DEFAULT_FROM_EMAIL="website@sam-osian.com",
+    )
+    def test_contact_form_valid_submission_sends_email(self):
+        response = self.client.post(
+            reverse("home"),
+            {
+                "form_name": "contact",
+                "name": "Test User",
+                "email": "test@example.com",
+                "message": "Hello from the contact form",
+            },
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Your message has been sent")
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["samoand@liverpool.ac.uk"])
+        self.assertIn("Test User", mail.outbox[0].subject)
+
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_contact_form_invalid_submission_shows_errors(self):
+        response = self.client.post(
+            reverse("home"),
+            {
+                "form_name": "contact",
+                "name": "",
+                "email": "not-an-email",
+                "message": "",
+            },
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "This field is required")
+        self.assertEqual(len(mail.outbox), 0)
 
 
 class PostRouteTests(TestCase):

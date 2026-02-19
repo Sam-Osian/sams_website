@@ -14,7 +14,7 @@
       href="https://cdn.jsdelivr.net/npm/simplebar@6.2.7/dist/simplebar.min.css"
     />
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
-    <link rel="stylesheet" href="{% static 'pages/site.css' %}?v=20260218b" />
+    <link rel="stylesheet" href="{% static 'pages/site.css' %}?v=20260218e" />
     {% block extra_head %}{% endblock %}
   </head>
   <body class="{% block body_class %}site-body{% endblock %}">
@@ -43,16 +43,17 @@
 
         <main class="shell-main">{% block content %}{% endblock %}</main>
 
-        <footer class="shell-footer" data-reveal>
+        <footer class="shell-footer">
           <a href="https://github.com/Sam-Osian" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a href="https://www.linkedin.com/in/sam-o-andrews/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a href="mailto:samoand@liverpool.ac.uk">Email</a>
+          <span class="footer-build-note">Website built by me :)</span>
         </footer>
       </div>
     </div>
 
     <script defer src="https://cdn.jsdelivr.net/npm/simplebar@6.2.7/dist/simplebar.min.js"></script>
-    <script defer src="{% static 'pages/site.js' %}?v=20260218b"></script>
+    <script defer src="{% static 'pages/site.js' %}?v=20260218e"></script>
     {% block extra_scripts %}{% endblock %}
   </body>
 </html>

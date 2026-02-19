@@ -4,6 +4,7 @@
   initReveal(prefersReducedMotion);
   initTilt(prefersReducedMotion);
   initMagnetic();
+  initContactModal();
   initWorkflowTabs();
   initMarkdownFlair();
   initPostReadingUi();
@@ -159,6 +160,56 @@ function initMagnetic() {
     button.addEventListener("pointermove", onMove);
     button.addEventListener("pointerleave", reset);
   });
+}
+
+function initContactModal() {
+  const modal = document.querySelector("[data-contact-modal]");
+  const openButtons = Array.from(document.querySelectorAll("[data-contact-open]"));
+  const closeButtons = Array.from(document.querySelectorAll("[data-contact-close]"));
+  if (!modal || !openButtons.length) {
+    return;
+  }
+
+  let closeTimer = null;
+  const closeDurationMs = 280;
+
+  const openModal = () => {
+    if (closeTimer) {
+      window.clearTimeout(closeTimer);
+      closeTimer = null;
+    }
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => {
+      modal.classList.add("is-open");
+      const firstField = modal.querySelector(".contact-input, .contact-textarea");
+      if (firstField) {
+        firstField.focus();
+      }
+    });
+  };
+
+  const closeModal = () => {
+    modal.classList.remove("is-open");
+    document.body.style.overflow = "";
+    closeTimer = window.setTimeout(() => {
+      modal.hidden = true;
+      closeTimer = null;
+    }, closeDurationMs);
+  };
+
+  openButtons.forEach((button) => button.addEventListener("click", openModal));
+  closeButtons.forEach((button) => button.addEventListener("click", closeModal));
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.hidden) {
+      closeModal();
+    }
+  });
+
+  if (modal.hasAttribute("data-contact-open-on-load")) {
+    openModal();
+  }
 }
 
 function initWorkflowTabs() {
