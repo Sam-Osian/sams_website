@@ -63,6 +63,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "pages.context_processors.seo",
             ],
         },
     },
@@ -122,3 +123,4 @@ STATIC_URL = "static/"
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "website@sam-osian.com")
 CONTACT_EMAIL_RECIPIENT = os.getenv("CONTACT_EMAIL_RECIPIENT", "samoand@liverpool.ac.uk")
+SITE_URL = os.getenv("SITE_URL", "http://127.0.0.1:8010").rstrip("/")

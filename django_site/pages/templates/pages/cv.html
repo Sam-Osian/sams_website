@@ -1,6 +1,11 @@
 {% extends "pages/base.html" %}
 
 {% block title %}CV | Sam Osian{% endblock %}
+{% block meta_description %}{{ cv.headline_description|default:seo_default_description|truncatechars:180 }}{% endblock %}
+{% block og_title %}CV | Sam Osian{% endblock %}
+{% block og_description %}{{ cv.headline_description|default:seo_default_description|truncatechars:200 }}{% endblock %}
+{% block twitter_title %}CV | Sam Osian{% endblock %}
+{% block twitter_description %}{{ cv.headline_description|default:seo_default_description|truncatechars:200 }}{% endblock %}
 {% block body_class %}site-body standard-page cv-page{% endblock %}
 
 {% block content %}

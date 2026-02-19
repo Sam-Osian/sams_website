@@ -5,7 +5,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Sam Osian{% endblock %}</title>
-    <link rel="icon" href="{% static 'favicon.png' %}" />
+    <meta name="description" content="{% block meta_description %}{{ seo_default_description }}{% endblock %}" />
+    <meta name="robots" content="{% block meta_robots %}index,follow{% endblock %}" />
+    <link rel="canonical" href="{% block canonical %}{{ canonical_url }}{% endblock %}" />
+
+    <meta property="og:site_name" content="{{ seo_site_name }}" />
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
+    <meta property="og:title" content="{% block og_title %}{% block og_title_fallback %}{{ seo_site_name }}{% endblock %}{% endblock %}" />
+    <meta property="og:description" content="{% block og_description %}{% block og_description_fallback %}{{ seo_default_description }}{% endblock %}{% endblock %}" />
+    <meta property="og:url" content="{% block og_url %}{{ canonical_url }}{% endblock %}" />
+    <meta property="og:image" content="{% block og_image %}{{ seo_default_image_url }}{% endblock %}" />
+
+    <meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock %}" />
+    <meta name="twitter:title" content="{% block twitter_title %}{% block twitter_title_fallback %}{{ seo_site_name }}{% endblock %}{% endblock %}" />
+    <meta name="twitter:description" content="{% block twitter_description %}{% block twitter_description_fallback %}{{ seo_default_description }}{% endblock %}{% endblock %}" />
+    <meta name="twitter:image" content="{% block twitter_image %}{{ seo_default_image_url }}{% endblock %}" />
+
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}" />
+    <link rel="alternate icon" href="{% static 'favicon.png' %}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -14,7 +31,7 @@
       href="https://cdn.jsdelivr.net/npm/simplebar@6.2.7/dist/simplebar.min.css"
     />
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
-    <link rel="stylesheet" href="{% static 'pages/site.css' %}?v=20260218f" />
+    <link rel="stylesheet" href="{% static 'pages/site.css' %}?v=20260218g" />
     {% block extra_head %}{% endblock %}
   </head>
   <body class="{% block body_class %}site-body{% endblock %}">
@@ -27,16 +44,16 @@
           <a class="identity" href="/">
             <span class="logo-shape" aria-hidden="true"></span>
             <span class="identity-dot" aria-hidden="true"></span>
-            <span class="identity-email">samoand@liverpool.ac.uk</span>
+            <span class="identity-email">Sam Osian</span>
           </a>
 
           <div class="top-actions">
-            <a class="top-link" href="/about/">About</a>
-            <a class="top-link" href="/publications/">Publications</a>
-            <button class="menu-orb" type="button" aria-label="Menu" disabled>
-              <span></span>
-              <span></span>
-              <span></span>
+            <div class="top-links" data-nav-links>
+              <a class="top-link" href="/about/">About</a>
+              <a class="top-link" href="/cv/">CV</a>
+            </div>
+            <button class="menu-orb" type="button" aria-label="Toggle navigation links" aria-expanded="false" data-nav-toggle>
+              <i class="hgi hgi-stroke hgi-arrow-left-01" aria-hidden="true"></i>
             </button>
           </div>
         </header>
@@ -53,7 +70,7 @@
     </div>
 
     <script defer src="https://cdn.jsdelivr.net/npm/simplebar@6.2.7/dist/simplebar.min.js"></script>
-    <script defer src="{% static 'pages/site.js' %}?v=20260218e"></script>
+    <script defer src="{% static 'pages/site.js' %}?v=20260218g"></script>
     {% block extra_scripts %}{% endblock %}
   </body>
 </html>

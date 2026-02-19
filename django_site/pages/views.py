@@ -1,6 +1,9 @@
+from datetime import datetime, timezone
+from xml.sax.saxutils import escape
+
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 
 from .content import (
@@ -14,6 +17,15 @@ from .content import (
     load_site_config,
 )
 from .forms import ContactForm
+
+
+def _site_base_url() -> str:
+    return getattr(settings, "SITE_URL", "").rstrip("/")
+
+
+def _full_url(path: str) -> str:
+    base = _site_base_url()
+    return f"{base}{path}" if base else path
 
 
 def home(request):
@@ -174,3 +186,45 @@ def post_detail(request, slug: str):
         "pages/post_detail.html",
         {"post": post, "author_profiles": author_profiles},
     )
+
+
+def robots_txt(_request):
+    sitemap_url = _full_url("/sitemap.xml")
+    content = (
+        "User-agent: *\n"
+        "Allow: /\n\n"
+        f"Sitemap: {sitemap_url}\n"
+    )
+    return HttpResponse(content, content_type="text/plain; charset=utf-8")
+
+
+def sitemap_xml(_request):
+    now_iso = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    urls: list[tuple[str, str, str]] = [
+        (_full_url("/"), "weekly", "1.0"),
+        (_full_url("/about/"), "monthly", "0.8"),
+        (_full_url("/cv/"), "monthly", "0.8"),
+        (_full_url("/publications/"), "monthly", "0.7"),
+    ]
+
+    for post in load_posts():
+        urls.append((_full_url(post.url), "monthly", "0.7"))
+
+    body = "".join(
+        (
+            "<url>"
+            f"<loc>{escape(loc)}</loc>"
+            f"<lastmod>{now_iso}</lastmod>"
+            f"<changefreq>{changefreq}</changefreq>"
+            f"<priority>{priority}</priority>"
+            "</url>"
+        )
+        for loc, changefreq, priority in urls
+    )
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        f"{body}"
+        "</urlset>"
+    )
+    return HttpResponse(xml, content_type="application/xml; charset=utf-8")

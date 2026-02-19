@@ -1,6 +1,11 @@
 {% extends "pages/base.html" %}
 
 {% block title %}Sam Osian{% endblock %}
+{% block meta_description %}{{ about_preview|truncatechars:160 }}{% endblock %}
+{% block og_title %}Sam Osian | Health Data Scientist{% endblock %}
+{% block og_description %}{{ about_preview|truncatechars:200 }}{% endblock %}
+{% block twitter_title %}Sam Osian | Health Data Scientist{% endblock %}
+{% block twitter_description %}{{ about_preview|truncatechars:200 }}{% endblock %}
 {% block body_class %}site-body home-page{% endblock %}
 
 {% block content %}

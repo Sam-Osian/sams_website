@@ -1,6 +1,14 @@
 {% extends "pages/base.html" %}
 
 {% block title %}{{ post.title }} | Sam Osian{% endblock %}
+{% block meta_description %}{{ post.summary_html|striptags|truncatechars:180 }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ post.title }} | Sam Osian{% endblock %}
+{% block og_description %}{{ post.summary_html|striptags|truncatechars:220 }}{% endblock %}
+{% block og_image %}{% if post.cover_image_url %}{{ post.cover_image_url }}{% else %}{{ seo_default_image_url }}{% endif %}{% endblock %}
+{% block twitter_image %}{% if post.cover_image_url %}{{ post.cover_image_url }}{% else %}{{ seo_default_image_url }}{% endif %}{% endblock %}
+{% block twitter_title %}{{ post.title }} | Sam Osian{% endblock %}
+{% block twitter_description %}{{ post.summary_html|striptags|truncatechars:220 }}{% endblock %}
 {% block body_class %}site-body standard-page{% endblock %}
 
 {% block content %}

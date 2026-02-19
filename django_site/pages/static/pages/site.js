@@ -2,6 +2,7 @@
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   initReveal(prefersReducedMotion);
+  initHeaderNavToggle();
   initTilt(prefersReducedMotion);
   initMagnetic();
   initContactModal();
@@ -9,6 +10,41 @@
   initMarkdownFlair();
   initPostReadingUi();
 })();
+
+function initHeaderNavToggle() {
+  const shellTop = document.querySelector(".shell-top");
+  const toggle = document.querySelector("[data-nav-toggle]");
+  const links = document.querySelector("[data-nav-links]");
+  if (!shellTop || !toggle || !links) {
+    return;
+  }
+
+  const setOpen = (open) => {
+    shellTop.classList.toggle("is-nav-open", open);
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  };
+
+  toggle.addEventListener("click", () => {
+    const currentlyOpen = shellTop.classList.contains("is-nav-open");
+    setOpen(!currentlyOpen);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!shellTop.classList.contains("is-nav-open")) {
+      return;
+    }
+    if (shellTop.contains(event.target)) {
+      return;
+    }
+    setOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setOpen(false);
+    }
+  });
+}
 
 function initReveal(prefersReducedMotion) {
   const targets = Array.from(document.querySelectorAll("[data-reveal]"));

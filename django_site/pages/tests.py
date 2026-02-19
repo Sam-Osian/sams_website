@@ -12,6 +12,7 @@ class PageRouteTests(TestCase):
         self.assertContains(response, "See CV")
         self.assertContains(response, "Featured post")
         self.assertContains(response, "Contact")
+        self.assertContains(response, 'name="description"')
 
     def test_about_page_renders(self):
         response = self.client.get(reverse("about"))
@@ -30,6 +31,18 @@ class PageRouteTests(TestCase):
         self.assertContains(response, "CV")
         self.assertContains(response, "Data Scientist")
         self.assertContains(response, "Back to homepage")
+
+    def test_robots_txt_renders(self):
+        response = self.client.get(reverse("robots-txt"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "User-agent: *")
+        self.assertContains(response, "Sitemap:")
+
+    def test_sitemap_xml_renders(self):
+        response = self.client.get(reverse("sitemap-xml"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "<urlset", html=False)
+        self.assertContains(response, "<loc>", html=False)
 
     @override_settings(
         EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
