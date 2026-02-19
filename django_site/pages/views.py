@@ -1,8 +1,11 @@
 import logging
+import time
+from hashlib import sha256
 from datetime import datetime, timezone
 from xml.sax.saxutils import escape
 
 from django.conf import settings
+from django.core.cache import cache
 from django.core.mail import EmailMessage
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
@@ -20,6 +23,48 @@ from .content import (
 from .forms import ContactForm
 
 logger = logging.getLogger(__name__)
+contact_protection_logger = logging.getLogger("pages.contact_protection")
+
+CONTACT_MIN_SUBMIT_SECONDS = 3
+CONTACT_RATE_LIMIT_1_MIN = 1
+CONTACT_RATE_LIMIT_10_MIN = 2
+CONTACT_FORM_RENDERED_AT_SESSION_KEY = "contact_form_rendered_at"
+CONTACT_HONEYPOT_FIELD = "company_website"
+
+
+def _client_ip(request) -> str:
+    forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR", "")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR", "").strip() or "unknown"
+
+
+def _ip_hash(ip_address: str) -> str:
+    secret = getattr(settings, "SECRET_KEY", "") or "fallback-secret"
+    return sha256(f"{secret}:{ip_address}".encode("utf-8")).hexdigest()[:16]
+
+
+def _increment_rate_counter(key: str, window_seconds: int) -> int:
+    if cache.add(key, 1, timeout=window_seconds):
+        return 1
+    try:
+        return cache.incr(key)
+    except ValueError:
+        cache.set(key, 1, timeout=window_seconds)
+        return 1
+
+
+def _log_contact_block(reason: str, request, **details) -> None:
+    ip = _client_ip(request)
+    hashed_ip = _ip_hash(ip)
+    detail_bits = " ".join(f"{key}={value}" for key, value in details.items())
+    contact_protection_logger.warning(
+        "contact_blocked reason=%s ip_hash=%s user_agent=%s %s",
+        reason,
+        hashed_ip,
+        request.META.get("HTTP_USER_AGENT", "")[:120],
+        detail_bits,
+    )
 
 
 def _site_base_url() -> str:
@@ -44,6 +89,49 @@ def home(request):
             contact_form = ContactForm()
 
     if request.method == "POST" and request.POST.get("form_name") == "contact":
+        ip = _client_ip(request)
+        hashed_ip = _ip_hash(ip)
+        minute_key = f"contact_rate_limit:1m:{hashed_ip}"
+        ten_minute_key = f"contact_rate_limit:10m:{hashed_ip}"
+        per_minute_count = _increment_rate_counter(minute_key, window_seconds=60)
+        per_ten_minute_count = _increment_rate_counter(ten_minute_key, window_seconds=600)
+        if per_minute_count > CONTACT_RATE_LIMIT_1_MIN or per_ten_minute_count > CONTACT_RATE_LIMIT_10_MIN:
+            _log_contact_block(
+                "rate_limit",
+                request,
+                per_minute_count=per_minute_count,
+                per_ten_minute_count=per_ten_minute_count,
+            )
+            request.session["contact_status"] = "send_error"
+            response = redirect("home")
+            response.status_code = 303
+            return response
+
+        honeypot_value = str(request.POST.get(CONTACT_HONEYPOT_FIELD, "")).strip()
+        if honeypot_value:
+            _log_contact_block("honeypot", request)
+            request.session["contact_status"] = "success"
+            response = redirect("home")
+            response.status_code = 303
+            return response
+
+        rendered_at = request.session.get(CONTACT_FORM_RENDERED_AT_SESSION_KEY)
+        now_ts = int(time.time())
+        if not isinstance(rendered_at, int):
+            _log_contact_block("missing_timestamp", request)
+            request.session["contact_status"] = "send_error"
+            response = redirect("home")
+            response.status_code = 303
+            return response
+
+        elapsed = now_ts - rendered_at
+        if elapsed < CONTACT_MIN_SUBMIT_SECONDS:
+            _log_contact_block("too_fast", request, elapsed_seconds=elapsed)
+            request.session["contact_status"] = "send_error"
+            response = redirect("home")
+            response.status_code = 303
+            return response
+
         contact_form = ContactForm(request.POST)
         if contact_form.is_valid():
             name = contact_form.cleaned_data["name"]
@@ -108,6 +196,8 @@ def home(request):
     if featured_post is not None:
         non_featured_posts = [post for post in posts if post.slug != featured_post.slug]
         recent_posts = non_featured_posts if non_featured_posts else [featured_post]
+
+    request.session[CONTACT_FORM_RENDERED_AT_SESSION_KEY] = int(time.time())
 
     return render(
         request,

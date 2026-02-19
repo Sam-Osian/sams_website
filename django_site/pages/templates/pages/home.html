@@ -194,6 +194,10 @@
           <form method="post" action="{% url 'home' %}" class="contact-form">
             {% csrf_token %}
             <input type="hidden" name="form_name" value="contact" />
+            <div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">
+              <label for="company_website">Company website</label>
+              <input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off" />
+            </div>
 
             <p class="contact-required-note">All fields are required.</p>
 
