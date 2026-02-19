@@ -1761,7 +1761,35 @@ a {
   }
 
   .shell-top {
+    align-items: flex-start;
     margin-bottom: 1.25rem;
+  }
+
+  .top-actions {
+    position: relative;
+  }
+
+  .top-links {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(220, 220, 220, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 12px 28px rgba(12, 12, 14, 0.1);
+    max-width: none;
+    opacity: 0;
+    padding: 0.45rem;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.45rem);
+    transform: translateY(-6px);
+    transition: opacity 0.24s ease, transform 0.24s ease;
+    z-index: 20;
+  }
+
+  .shell-top.is-nav-open .top-links {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   .identity-email {
