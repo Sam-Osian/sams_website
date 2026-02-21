@@ -35,7 +35,7 @@ class PageRouteTests(TestCase):
     def test_publications_page_renders(self):
         response = self.client.get(reverse("publications"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Content coming soon")
+        self.assertContains(response, "Content in preparation")
 
     def test_cv_page_renders(self):
         response = self.client.get(reverse("cv"))
