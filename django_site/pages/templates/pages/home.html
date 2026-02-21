@@ -80,7 +80,7 @@
               </a>
             {% endif %}
             <h2><a href="{{ featured_post.url }}">{{ featured_post.title }}</a></h2>
-            <p>{{ featured_post.summary_html|striptags|truncatechars:220 }}</p>
+            <p>{{ featured_post.summary_html|striptags|truncatechars:300 }}</p>
             <div class="panel-meta-row">
               {% if featured_post.date %}
                 <span>{{ featured_post.date|date:"F j, Y" }}</span>

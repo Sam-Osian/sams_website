@@ -15,9 +15,10 @@ import yaml
 CONTENT_DIR = Path(__file__).resolve().parents[1] / "content"
 POSTS_DIR = CONTENT_DIR / "posts"
 CV_PATH = CONTENT_DIR / "cv.md"
-AUTHORS_PATH = CONTENT_DIR / ".authors.yml"
-SITE_CONFIG_PATH = Path(__file__).resolve().parent / "site_config.yaml"
-POSTS_CONFIG_PATH = Path(__file__).resolve().parent / "featured_post.yaml"
+CONFIG_DIR = CONTENT_DIR / "config"
+AUTHORS_PATH = CONFIG_DIR / "authors.yaml"
+SITE_CONFIG_PATH = CONFIG_DIR / "site_config.yaml"
+POSTS_CONFIG_PATH = CONFIG_DIR / "featured_post.yaml"
 PAGE_MAP = {
     "publications": CONTENT_DIR / "publications.md",
 }
@@ -156,7 +157,7 @@ def _render_markdown(content: str) -> str:
     return markdown.markdown(
         cleaned,
         extensions=MARKDOWN_EXTENSIONS,
-        output_format="html5",
+        output_format="html",
     )
 
 
