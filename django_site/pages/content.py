@@ -19,8 +19,6 @@ AUTHORS_PATH = CONTENT_DIR / ".authors.yml"
 SITE_CONFIG_PATH = Path(__file__).resolve().parent / "site_config.yaml"
 POSTS_CONFIG_PATH = Path(__file__).resolve().parent / "featured_post.yaml"
 PAGE_MAP = {
-    "home": CONTENT_DIR / "index.md",
-    "about": CONTENT_DIR / "about.md",
     "publications": CONTENT_DIR / "publications.md",
 }
 READ_MORE_MARKER = "<!-- more -->"
@@ -287,18 +285,6 @@ def load_page(page_key: str) -> PageContent:
     title = str(metadata.get("title") or _title_from_markdown_body(body))
     rendered = _render_markdown(body)
     return PageContent(title=title, html=rendered)
-
-
-def load_page_excerpt(page_key: str, max_chars: int = 320) -> str:
-    page = load_page(page_key)
-    plain_text = _html_to_text(page.html)
-    if len(plain_text) <= max_chars:
-        return plain_text
-    clipped = plain_text[: max_chars + 1]
-    cutoff = clipped.rfind(" ")
-    if cutoff <= 0:
-        cutoff = max_chars
-    return f"{clipped[:cutoff].rstrip()}..."
 
 
 def _load_post(source_path: Path) -> PostContent:
