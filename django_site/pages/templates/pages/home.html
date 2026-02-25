@@ -14,7 +14,17 @@
       <span class="hero-line">
         {{ hero_config.intro_line|default:"Hi, I'm" }}
         <span class="inline-avatar-wrap">
-          <img class="inline-avatar" src="/static/assets/me-circle.png" alt="Portrait of Sam Osian" />
+          <img
+            class="inline-avatar"
+            src="/static/assets/me-circle-128.webp"
+            alt=""
+            aria-hidden="true"
+            width="64"
+            height="64"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
         </span>
         {{ hero_config.name|default:"Sam Osian" }}!
       </span>

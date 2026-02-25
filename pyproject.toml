@@ -13,4 +13,5 @@ dependencies = [
     "psycopg[binary]>=3.2.10",
     "pyyaml>=6.0.2",
     "whitenoise>=6.11.0",
+    "pillow>=12.1.1",
 ]

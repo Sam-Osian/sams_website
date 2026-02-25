@@ -25,6 +25,9 @@ class PageRouteTests(TestCase):
         self.assertContains(response, "Featured post")
         self.assertContains(response, "Contact")
         self.assertContains(response, 'name="description"')
+        self.assertContains(response, 'class="inline-avatar"', html=False)
+        self.assertContains(response, 'src="/static/assets/me-circle-128.webp"', html=False)
+        self.assertContains(response, 'alt=""', html=False)
 
     def test_about_page_renders(self):
         response = self.client.get(reverse("about"))
