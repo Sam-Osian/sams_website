@@ -3,12 +3,14 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date, datetime
 import html
+import mimetypes
 from math import ceil
 from pathlib import Path
 import re
 from typing import Any
 
 import markdown
+from PIL import Image
 import yaml
 
 
@@ -63,6 +65,9 @@ class PostContent:
     body_html: str
     cover_image_url: str | None
     social_image_url: str | None
+    social_image_mime_type: str | None
+    social_image_width: int | None
+    social_image_height: int | None
 
     @property
     def url(self) -> str:
@@ -155,6 +160,31 @@ def _normalize_markdown_paths(content: str) -> str:
     content = re.sub(r"\]\(\s*publications\.md\)", "](/publications/)", content)
     content = re.sub(r"\]\(\s*posts/([a-zA-Z0-9\-]+)\.md\)", r"](/\1/)", content)
     return content
+
+
+def _asset_path_from_url(url: str) -> Path | None:
+    if not url.startswith("/static/"):
+        return None
+    static_relative = url.removeprefix("/static/")
+    return Path(__file__).resolve().parent / "static" / static_relative
+
+
+def _image_metadata_from_url(url: str | None) -> tuple[str | None, int | None, int | None]:
+    if not url:
+        return None, None, None
+
+    mime_type, _ = mimetypes.guess_type(url)
+    image_path = _asset_path_from_url(url)
+    if image_path is None or not image_path.exists():
+        return mime_type, None, None
+
+    try:
+        with Image.open(image_path) as image:
+            width, height = image.size
+    except OSError:
+        return mime_type, None, None
+
+    return mime_type, width, height
 
 
 def _render_markdown(content: str) -> str:
@@ -336,6 +366,9 @@ def _load_post(source_path: Path) -> PostContent:
     social_image = metadata.get("social_image")
     if isinstance(social_image, str) and social_image.strip():
         social_image_url = _normalize_asset_url(social_image)
+    social_image_mime_type, social_image_width, social_image_height = _image_metadata_from_url(
+        social_image_url or cover_image_url
+    )
 
     has_read_more = READ_MORE_MARKER in body
     summary_source, remainder = body.split(READ_MORE_MARKER, maxsplit=1) if has_read_more else (body, body)
@@ -383,6 +416,9 @@ def _load_post(source_path: Path) -> PostContent:
         body_html=body_html,
         cover_image_url=cover_image_url,
         social_image_url=social_image_url,
+        social_image_mime_type=social_image_mime_type,
+        social_image_width=social_image_width,
+        social_image_height=social_image_height,
     )
 
 

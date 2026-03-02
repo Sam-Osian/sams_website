@@ -17,6 +17,7 @@
     <meta property="og:description" content="{% block og_description %}{% block og_description_fallback %}{{ seo_default_description }}{% endblock %}{% endblock %}" />
     <meta property="og:url" content="{% block og_url %}{{ canonical_url }}{% endblock %}" />
     <meta property="og:image" content="{% block og_image %}{{ seo_default_image_url }}{% endblock %}" />
+    {% block og_image_meta %}{% endblock %}
 
     <meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock %}" />
     <meta name="twitter:title" content="{% block twitter_title %}{% block twitter_title_fallback %}{{ seo_site_name }}{% endblock %}{% endblock %}" />

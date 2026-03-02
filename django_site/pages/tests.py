@@ -247,6 +247,21 @@ class PostRouteTests(TestCase):
             'name="twitter:image" content="http://testserver/static/assets/pfd-toolkit-cover.jpg"',
             html=False,
         )
+        self.assertContains(
+            response,
+            'property="og:image:type" content="image/jpeg"',
+            html=False,
+        )
+        self.assertContains(
+            response,
+            'property="og:image:width" content="5000"',
+            html=False,
+        )
+        self.assertContains(
+            response,
+            'property="og:image:height" content="2812"',
+            html=False,
+        )
 
     def test_post_external_links_open_in_new_tab(self):
         response = self.client.get(reverse("post-detail", kwargs={"slug": "pfd-toolkit-announcement"}))
