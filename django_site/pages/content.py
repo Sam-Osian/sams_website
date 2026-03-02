@@ -23,6 +23,7 @@ PAGE_MAP = {
     "publications": CONTENT_DIR / "publications.md",
 }
 READ_MORE_MARKER = "<!-- more -->"
+POST_FOOTER_MARKER = "<!-- post-footer -->"
 MARKDOWN_EXTENSIONS = [
     "admonition",
     "abbr",
@@ -48,6 +49,8 @@ class PostContent:
     post_id: int | None
     slug: str
     title: str
+    seo_title: str
+    seo_description: str
     date: date | None
     draft: bool
     authors: list[str]
@@ -56,6 +59,7 @@ class PostContent:
     reading_time_minutes: int
     summary_html: str
     main_body_html: str
+    footer_html: str
     body_html: str
     cover_image_url: str | None
 
@@ -161,6 +165,26 @@ def _render_markdown(content: str) -> str:
     )
 
 
+def _external_links_new_tab(html_content: str) -> str:
+    anchor_pattern = re.compile(r"<a\s+([^>]*?)href=[\"'](https?://[^\"']+)[\"']([^>]*)>", flags=re.IGNORECASE)
+
+    def replace(match: re.Match[str]) -> str:
+        before_attrs = match.group(1)
+        href = match.group(2)
+        after_attrs = match.group(3)
+        attrs = f"{before_attrs}href=\"{href}\"{after_attrs}"
+
+        if "target=" not in attrs.lower():
+            attrs = f'{attrs} target="_blank"'
+
+        if "rel=" not in attrs.lower():
+            attrs = f'{attrs} rel="noopener noreferrer"'
+
+        return f"<a {attrs}>"
+
+    return anchor_pattern.sub(replace, html_content)
+
+
 def _title_from_markdown_body(body: str) -> str:
     for line in body.splitlines():
         stripped = line.strip()
@@ -205,6 +229,12 @@ def _as_string_list(value: Any) -> list[str]:
     if not isinstance(value, list):
         return []
     return [str(item).strip() for item in value if str(item).strip()]
+
+
+def _as_string(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
 
 
 def _extract_toc_entries(body_html: str) -> list[PostTocEntry]:
@@ -304,26 +334,47 @@ def _load_post(source_path: Path) -> PostContent:
 
     has_read_more = READ_MORE_MARKER in body
     summary_source, remainder = body.split(READ_MORE_MARKER, maxsplit=1) if has_read_more else (body, body)
+    main_body_source, footer_source = (
+        remainder.split(POST_FOOTER_MARKER, maxsplit=1)
+        if POST_FOOTER_MARKER in remainder
+        else (remainder, "")
+    )
     summary_source = _strip_cover_image_from_body(summary_source, cover_image_url)
-    main_body_source = _strip_cover_image_from_body(remainder, cover_image_url)
+    main_body_source = _strip_cover_image_from_body(main_body_source, cover_image_url)
+    footer_source = _strip_cover_image_from_body(footer_source, cover_image_url)
 
     summary_html = _render_markdown(summary_source)
     main_body_html = _render_markdown(main_body_source)
-    body_source = _strip_cover_image_from_body(body.replace(READ_MORE_MARKER, ""), cover_image_url)
+    footer_html = _render_markdown(footer_source) if footer_source.strip() else ""
+    body_source = _strip_cover_image_from_body(
+        body.replace(READ_MORE_MARKER, "").replace(POST_FOOTER_MARKER, ""),
+        cover_image_url,
+    )
     body_html = _render_markdown(body_source)
+
+    summary_html = _external_links_new_tab(summary_html)
+    main_body_html = _external_links_new_tab(main_body_html)
+    footer_html = _external_links_new_tab(footer_html)
+    body_html = _external_links_new_tab(body_html)
+    summary_text = _html_to_text(summary_html)
+    seo_title = _as_string(metadata.get("seo_title")) or title
+    seo_description = _as_string(metadata.get("seo_description")) or summary_text
 
     return PostContent(
         post_id=_parse_post_id(metadata.get("id")),
         slug=slug,
         title=title,
+        seo_title=seo_title,
+        seo_description=seo_description,
         date=published_date,
         draft=draft,
         authors=authors,
         tags=tags,
         toc_entries=_extract_toc_entries(main_body_html),
-        reading_time_minutes=_estimate_reading_time_minutes(summary_html, main_body_html),
+        reading_time_minutes=_estimate_reading_time_minutes(summary_html, main_body_html, footer_html),
         summary_html=summary_html,
         main_body_html=main_body_html,
+        footer_html=footer_html,
         body_html=body_html,
         cover_image_url=cover_image_url,
     )

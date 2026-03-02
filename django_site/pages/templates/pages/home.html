@@ -80,15 +80,9 @@
       {% if featured_post %}
         <div class="posts-layout">
           <section class="posts-featured">
-            {% if featured_post.cover_image_url %}
-              <a class="featured-media" href="{{ featured_post.url }}">
-                <img src="{{ featured_post.cover_image_url }}" alt="Preview image for {{ featured_post.title }}" />
-              </a>
-            {% else %}
-              <a class="featured-media featured-media-fallback" href="{{ featured_post.url }}">
-                <span>Article preview</span>
-              </a>
-            {% endif %}
+            <a class="featured-media" href="{{ featured_post.url }}">
+              <img src="{% if featured_post.cover_image_url %}{{ featured_post.cover_image_url }}{% else %}{{ site_default_cover_path }}{% endif %}" alt="Preview image for {{ featured_post.title }}" />
+            </a>
             <h2><a href="{{ featured_post.url }}">{{ featured_post.title }}</a></h2>
             <p>{{ featured_post.summary_html|striptags|truncatechars:300 }}</p>
             <div class="panel-meta-row">

@@ -58,6 +58,13 @@ class PageRouteTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "<urlset", html=False)
         self.assertContains(response, "<loc>", html=False)
+        self.assertContains(response, "<loc>https://sam-osian.com/pfd-toolkit-announcement/</loc>", html=False)
+        self.assertContains(response, "<lastmod>2026-03-02</lastmod>", html=False)
+        self.assertContains(
+            response,
+            "<loc>https://sam-osian.com/about/</loc><changefreq>monthly</changefreq><priority>0.8</priority>",
+            html=False,
+        )
 
     @override_settings(
         EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
@@ -181,6 +188,79 @@ class PostRouteTests(TestCase):
         self.assertContains(response, "Tags")
         self.assertContains(response, "Sam Osian")
         self.assertContains(response, 'aria-label="Back to homepage"')
+
+    def test_post_seo_fields_fall_back_when_not_configured(self):
+        response = self.client.get(reverse("post-detail", kwargs={"slug": "rethinking-significance"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            "<title>Rethinking &#x27;significance&#x27; — Has the p-value overstayed its welcome? | Sam Osian</title>",
+            html=False,
+        )
+        self.assertContains(
+            response,
+            'property="og:description" content="In research, the p-value is often treated as the ultimate test of truth.',
+            html=False,
+        )
+
+    def test_post_footer_marker_renders_as_styled_footer_note(self):
+        response = self.client.get(reverse("post-detail", kwargs={"slug": "pfd-toolkit-announcement"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'class="post-footer-note"', html=False)
+        self.assertContains(response, "PFD Toolkit is available as an interactive web app")
+        self.assertNotContains(response, "<!-- post-footer -->", html=False)
+
+    def test_post_seo_fields_can_be_overridden_in_front_matter(self):
+        response = self.client.get(reverse("post-detail", kwargs={"slug": "pfd-toolkit-announcement"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            "<title>Turning PFD Reports Into Usable Safety Intelligence | Sam Osian</title>",
+            html=False,
+        )
+        self.assertContains(
+            response,
+            'property="og:description" content="We show how PFD Toolkit converts Prevention of Future Deaths reports into a searchable, analysable dataset, enabling faster national reviews and more practical learning from preventable harm."',
+            html=False,
+        )
+        self.assertContains(
+            response,
+            'name="description" content="We show how PFD Toolkit converts Prevention of Future Deaths reports into a searchable, analysable dataset, enabling faster national reviews and more practical learning from preve',
+            html=False,
+        )
+
+    def test_post_uses_configured_cover_image(self):
+        response = self.client.get(reverse("post-detail", kwargs={"slug": "pfd-toolkit-announcement"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "/static/assets/pfd-toolkit-cover.svg")
+
+    def test_post_social_image_uses_absolute_cover_url(self):
+        response = self.client.get(reverse("post-detail", kwargs={"slug": "pfd-toolkit-announcement"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            'property="og:image" content="http://testserver/static/assets/pfd-toolkit-cover.svg"',
+            html=False,
+        )
+        self.assertContains(
+            response,
+            'name="twitter:image" content="http://testserver/static/assets/pfd-toolkit-cover.svg"',
+            html=False,
+        )
+
+    def test_post_external_links_open_in_new_tab(self):
+        response = self.client.get(reverse("post-detail", kwargs={"slug": "pfd-toolkit-announcement"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            'href="https://mentalhealth.bmj.com/content/29/1/e302212" target="_blank" rel="noopener noreferrer"',
+            html=False,
+        )
+        self.assertContains(
+            response,
+            'href="https://pfdtoolkit.org" target="_blank" rel="noopener noreferrer"',
+            html=False,
+        )
 
     def test_draft_post_is_hidden(self):
         response = self.client.get(reverse("post-detail", kwargs={"slug": "the-lives-we-could-save"}))

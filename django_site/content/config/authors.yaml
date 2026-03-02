@@ -4,3 +4,8 @@ authors:
     description: Health Data Scientist
     avatar: assets/sam.png
     url: https://sam-osian.com
+  dan-joyce:
+    name: Dan Joyce
+    description: Professor of Connected Mental Health
+    avatar: assets/danjoyce.jpg
+    url: https://danwjoyce.netlify.app/

@@ -1,7 +1,6 @@
 import logging
 import time
 from hashlib import sha256
-from datetime import datetime, timezone
 from xml.sax.saxutils import escape
 
 from django.conf import settings
@@ -74,6 +73,14 @@ def _site_base_url() -> str:
 def _full_url(path: str) -> str:
     base = _site_base_url()
     return f"{base}{path}" if base else path
+
+
+def _absolute_asset_url(request, url: str | None) -> str | None:
+    if not url:
+        return None
+    if url.startswith(("http://", "https://")):
+        return url
+    return request.build_absolute_uri(url)
 
 
 def home(request):
@@ -255,6 +262,8 @@ def post_detail(request, slug: str):
     if post is None:
         raise Http404("Post not found.")
 
+    post_cover_image_absolute_url = _absolute_asset_url(request, post.cover_image_url)
+
     authors_index = load_authors_index()
     author_profiles = [authors_index[author] for author in post.authors if author in authors_index]
     missing_authors = [
@@ -278,7 +287,11 @@ def post_detail(request, slug: str):
     return render(
         request,
         "pages/post_detail.html",
-        {"post": post, "author_profiles": author_profiles},
+        {
+            "post": post,
+            "author_profiles": author_profiles,
+            "post_cover_image_absolute_url": post_cover_image_absolute_url,
+        },
     )
 
 
@@ -293,27 +306,27 @@ def robots_txt(_request):
 
 
 def sitemap_xml(_request):
-    now_iso = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-    urls: list[tuple[str, str, str]] = [
-        (_full_url("/"), "weekly", "1.0"),
-        (_full_url("/about/"), "monthly", "0.8"),
-        (_full_url("/cv/"), "monthly", "0.8"),
-        (_full_url("/publications/"), "monthly", "0.7"),
+    urls: list[tuple[str, str, str, str | None]] = [
+        (_full_url("/"), "weekly", "1.0", None),
+        (_full_url("/about/"), "monthly", "0.8", None),
+        (_full_url("/cv/"), "monthly", "0.8", None),
+        (_full_url("/publications/"), "monthly", "0.7", None),
     ]
 
     for post in load_posts():
-        urls.append((_full_url(post.url), "monthly", "0.7"))
+        lastmod = post.date.isoformat() if post.date else None
+        urls.append((_full_url(post.url), "monthly", "0.7", lastmod))
 
     body = "".join(
         (
             "<url>"
             f"<loc>{escape(loc)}</loc>"
-            f"<lastmod>{now_iso}</lastmod>"
+            f"{f'<lastmod>{lastmod}</lastmod>' if lastmod else ''}"
             f"<changefreq>{changefreq}</changefreq>"
             f"<priority>{priority}</priority>"
             "</url>"
         )
-        for loc, changefreq, priority in urls
+        for loc, changefreq, priority, lastmod in urls
     )
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>'

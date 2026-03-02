@@ -13,7 +13,7 @@ key_skills:
   - Patient Safety
   - Automation
 experience_entries:
-  - period: 2025 - Present
+  - period: 2026 - Present
     role: Data Scientist
     organisation: Mersey Care NHS Foundation Trust
     context: Contract (Band 8a)

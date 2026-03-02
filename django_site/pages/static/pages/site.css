@@ -585,16 +585,6 @@ a {
   width: 100%;
 }
 
-.featured-media-fallback {
-  align-items: center;
-  background: linear-gradient(132deg, #dadde6, #f2d7b7);
-  color: #32343c;
-  display: flex;
-  font-size: 0.92rem;
-  font-weight: 800;
-  justify-content: center;
-}
-
 .panel-meta-row {
   align-items: center;
   color: #767a82;
@@ -1569,6 +1559,23 @@ a {
   margin: 0 0 1.22rem;
 }
 
+.post-preamble-content {
+  margin-bottom: 3rem;
+}
+
+.post-footer-note {
+  border-top: 1px solid rgba(35, 38, 45, 0.1);
+  color: #626873;
+  font-size: 0.93rem;
+  font-style: italic;
+  margin-top: 2.6rem;
+  padding-top: 1rem;
+}
+
+.post-footer-note p:last-child {
+  margin-bottom: 0;
+}
+
 .post-shell .markdown-body .md-lead {
   color: #3f434d;
   font-size: 1.06rem;
@@ -1579,7 +1586,7 @@ a {
   color: #b58149;
   font-family: "Instrument Serif", serif;
   float: none;
-  font-size: 5em;
+  font-size: 4.6em;
   font-style: normal;
   font-weight: 200;
   line-height: 1;

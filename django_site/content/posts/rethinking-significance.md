@@ -2,6 +2,8 @@
 draft: false
 id: 1
 title: Rethinking 'significance' — Has the p-value overstayed its welcome?
+seo_title: Rethinking Statistical Significance Beyond the p-value
+seo_description: A short critique of treating the p-value as a universal rule, and why standards of evidence should depend on context, consequences, and practical decision-making.
 slug: rethinking-significance
 authors:
   - sam
