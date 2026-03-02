@@ -13,6 +13,7 @@ categories:
   - Announcement
   - Original research
 image: assets/pfd-toolkit-cover.svg
+social_image: assets/pfd-toolkit-cover.jpg
 meta:
   - property: og:image
     content: 

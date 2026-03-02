@@ -189,17 +189,17 @@ class PostRouteTests(TestCase):
         self.assertContains(response, "Sam Osian")
         self.assertContains(response, 'aria-label="Back to homepage"')
 
-    def test_post_seo_fields_fall_back_when_not_configured(self):
+    def test_post_seo_fields_render_when_configured(self):
         response = self.client.get(reverse("post-detail", kwargs={"slug": "rethinking-significance"}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response,
-            "<title>Rethinking &#x27;significance&#x27; — Has the p-value overstayed its welcome? | Sam Osian</title>",
+            "<title>Rethinking Statistical Significance Beyond the p-value | Sam Osian</title>",
             html=False,
         )
         self.assertContains(
             response,
-            'property="og:description" content="In research, the p-value is often treated as the ultimate test of truth.',
+            'property="og:description" content="A short critique of treating the p-value as a universal rule, and why standards of evidence should depend on context, consequences, and practical decision-making."',
             html=False,
         )
 
@@ -239,12 +239,12 @@ class PostRouteTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response,
-            'property="og:image" content="http://testserver/static/assets/pfd-toolkit-cover.svg"',
+            'property="og:image" content="http://testserver/static/assets/pfd-toolkit-cover.jpg"',
             html=False,
         )
         self.assertContains(
             response,
-            'name="twitter:image" content="http://testserver/static/assets/pfd-toolkit-cover.svg"',
+            'name="twitter:image" content="http://testserver/static/assets/pfd-toolkit-cover.jpg"',
             html=False,
         )
 

@@ -263,6 +263,10 @@ def post_detail(request, slug: str):
         raise Http404("Post not found.")
 
     post_cover_image_absolute_url = _absolute_asset_url(request, post.cover_image_url)
+    post_social_image_absolute_url = _absolute_asset_url(
+        request,
+        post.social_image_url or post.cover_image_url,
+    )
 
     authors_index = load_authors_index()
     author_profiles = [authors_index[author] for author in post.authors if author in authors_index]
@@ -291,6 +295,7 @@ def post_detail(request, slug: str):
             "post": post,
             "author_profiles": author_profiles,
             "post_cover_image_absolute_url": post_cover_image_absolute_url,
+            "post_social_image_absolute_url": post_social_image_absolute_url,
         },
     )
 

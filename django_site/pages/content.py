@@ -62,6 +62,7 @@ class PostContent:
     footer_html: str
     body_html: str
     cover_image_url: str | None
+    social_image_url: str | None
 
     @property
     def url(self) -> str:
@@ -331,6 +332,10 @@ def _load_post(source_path: Path) -> PostContent:
     if not tags:
         tags = _as_string_list(metadata.get("categories"))
     cover_image_url = _extract_cover_image(metadata, body)
+    social_image_url = None
+    social_image = metadata.get("social_image")
+    if isinstance(social_image, str) and social_image.strip():
+        social_image_url = _normalize_asset_url(social_image)
 
     has_read_more = READ_MORE_MARKER in body
     summary_source, remainder = body.split(READ_MORE_MARKER, maxsplit=1) if has_read_more else (body, body)
@@ -377,6 +382,7 @@ def _load_post(source_path: Path) -> PostContent:
         footer_html=footer_html,
         body_html=body_html,
         cover_image_url=cover_image_url,
+        social_image_url=social_image_url,
     )
 
 
