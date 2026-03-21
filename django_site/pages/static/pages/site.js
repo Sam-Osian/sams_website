@@ -9,6 +9,7 @@
   initWorkflowTabs();
   initMarkdownFlair();
   initPostReadingUi();
+  initCvPdfDownload();
 })();
 
 function initHeaderNavToggle() {
@@ -270,6 +271,108 @@ function initWorkflowTabs() {
 
   buttons.forEach((button) => {
     button.addEventListener("click", () => activate(button.dataset.step));
+  });
+}
+
+function initCvPdfDownload() {
+  const trigger = document.querySelector("[data-cv-pdf-download]");
+  const cvDocument = document.querySelector(".cv-document");
+  if (!trigger || !cvDocument) {
+    return;
+  }
+
+  const ensureHtml2Pdf = () =>
+    new Promise((resolve, reject) => {
+      if (window.html2pdf) {
+        resolve(window.html2pdf);
+        return;
+      }
+
+      const existingScript = document.querySelector('script[data-html2pdf-loader="true"]');
+      if (existingScript) {
+        existingScript.addEventListener("load", () => resolve(window.html2pdf), { once: true });
+        existingScript.addEventListener("error", () => reject(new Error("Failed to load html2pdf")), { once: true });
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js";
+      script.async = true;
+      script.dataset.html2pdfLoader = "true";
+      script.onload = () => resolve(window.html2pdf);
+      script.onerror = () => reject(new Error("Failed to load html2pdf"));
+      document.head.appendChild(script);
+    });
+
+  trigger.addEventListener("click", async () => {
+    const originalText = trigger.textContent;
+    trigger.disabled = true;
+    trigger.textContent = "Preparing PDF...";
+
+    try {
+      await ensureHtml2Pdf();
+
+      const documentClone = cvDocument.cloneNode(true);
+      documentClone.querySelectorAll("[data-pdf-exclude]").forEach((el) => el.remove());
+      documentClone.querySelectorAll("[data-reveal]").forEach((el) => {
+        el.classList.add("is-visible");
+        el.removeAttribute("data-reveal");
+        el.style.transitionDelay = "";
+      });
+
+      const exportHost = document.createElement("div");
+      exportHost.style.left = "-100000px";
+      exportHost.style.position = "fixed";
+      exportHost.style.top = "0";
+      exportHost.style.width = "210mm";
+      exportHost.style.zIndex = "-1";
+      exportHost.className = "cv-pdf-export-host";
+
+      const exportStyle = document.createElement("style");
+      exportStyle.textContent = `
+        .cv-pdf-export-host .cv-document {
+          background: #ffffff !important;
+          border: 0 !important;
+          border-radius: 0 !important;
+          box-shadow: none !important;
+          font-size: 90% !important;
+          padding: 0 !important;
+        }
+        .cv-pdf-export-host .cv-doc-header {
+          padding-right: 0 !important;
+        }
+        .cv-pdf-export-host .cv-doc-header h1 {
+          font-size: 2.15rem !important;
+        }
+        .cv-pdf-export-host .cv-doc-body h3 {
+          font-size: 1.28rem !important;
+        }
+        .cv-pdf-export-host .cv-doc-body ul {
+          list-style-position: inside !important;
+          padding-left: 0 !important;
+        }
+      `;
+      exportHost.appendChild(exportStyle);
+      exportHost.appendChild(documentClone);
+      document.body.appendChild(exportHost);
+
+      const options = {
+        filename: "sam-osian-cv.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        margin: [14, 16, 14, 16],
+        pagebreak: { mode: ["css", "legacy"] },
+      };
+
+      await window.html2pdf().set(options).from(exportHost).save();
+      exportHost.remove();
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+    } finally {
+      trigger.disabled = false;
+      trigger.textContent = originalText;
+    }
   });
 }
 

@@ -22,6 +22,9 @@
         <h1>{{ cv.headline_title }}</h1>
         {% if cv.headline_description %}
           <p>{{ cv.headline_description }}</p>
+          <button type="button" class="cv-download-inline" data-cv-pdf-download data-pdf-exclude>
+            Download CV as PDF
+          </button>
         {% endif %}
         {% if cv.intro_html %}
           <div class="cv-intro markdown-body">{{ cv.intro_html|safe }}</div>
@@ -93,5 +96,6 @@
         </div>
       </section>
     </article>
+
   </div>
 {% endblock %}

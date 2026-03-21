@@ -1149,6 +1149,33 @@ a {
   transform: translateY(-1px) scale(0.99);
 }
 
+.cv-download-inline {
+  background: transparent;
+  border: 0;
+  color: #3f4552;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.86rem;
+  font-weight: 700;
+  margin: 0;
+  position: absolute;
+  right: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  top: 0.2rem;
+  transition: color 0.2s ease;
+}
+
+.cv-download-inline:hover {
+  color: #252a33;
+}
+
+.cv-download-inline:focus-visible {
+  outline: 2px solid rgba(25, 118, 210, 0.45);
+  outline-offset: 3px;
+}
+
 .cv-stage {
   min-width: 0;
 }
@@ -1969,6 +1996,11 @@ a {
   margin: 0.35rem 0 0.4rem;
 }
 
+.cv-doc-header {
+  padding-right: 180px;
+  position: relative;
+}
+
 .cv-doc-header p {
   color: #535861;
   margin: 0;
@@ -2062,6 +2094,15 @@ a {
 
   .cv-back-rail {
     justify-content: flex-start;
+  }
+
+  .cv-download-inline {
+    margin-top: 0.45rem;
+    position: static;
+  }
+
+  .cv-doc-header {
+    padding-right: 0;
   }
 
   .cv-doc-list li {

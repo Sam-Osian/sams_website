@@ -1,7 +1,7 @@
 ---
 title: Curriculum Vitae
 headline_title: Sam Osian - Curriculum Vitae
-headline_description: Data scientist and PhD student focused on applied AI, natural language processing, and translating evidence into practical tools for frontline decision-making.
+headline_description: Health data scientist and PhD researcher focused on applied AI, natural language processing, and translating evidence into practical tools for frontline decision-making.
 experience_title: Experience
 education_title: Education
 skills_title: Key Skills
@@ -58,4 +58,3 @@ education_entries:
     highlights:
       - Built interdisciplinary grounding in policy, systems thinking, and statistical research.
 ---
-
